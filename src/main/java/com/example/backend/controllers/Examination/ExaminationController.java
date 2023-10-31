@@ -24,7 +24,7 @@ public class ExaminationController {
         return examinationService.createExamination(examination);
     }
     @PatchMapping("/{id}")
-    public Examinations updateExamination(@RequestBody Examinations examination, @PathVariable(name = "id") int id) {
+    public Examinations updateExamination(@RequestBody Examinations examination, @PathVariable int id) {
         examination.setId(id);
         return examinationService.updateExamination(examination);
     }

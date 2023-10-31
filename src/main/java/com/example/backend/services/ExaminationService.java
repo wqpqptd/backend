@@ -25,8 +25,8 @@ public class ExaminationService {
         if (retrieved.isEmpty()) {
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
         }
-        var result = retrieved.get();
-        return examinationRepository.save(result);
+
+        return examinationRepository.save(examination);
     }
 
     public Examinations findExaminationById(int id) {
