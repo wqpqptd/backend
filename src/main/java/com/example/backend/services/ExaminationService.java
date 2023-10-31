@@ -20,7 +20,7 @@ public class ExaminationService {
         return examinationRepository.save(examination);
     }
 
-    public Examinations updateNation(Examinations examination) {
+    public Examinations updateExamination(Examinations examination) {
         var retrieved = examinationRepository.findById(examination.getId());
         if (retrieved.isEmpty()) {
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
@@ -29,7 +29,7 @@ public class ExaminationService {
         return examinationRepository.save(result);
     }
 
-    public Examinations findNationById(int id) {
+    public Examinations findExaminationById(int id) {
         var retrieved = examinationRepository.findById(id);
         if (retrieved.isEmpty()){
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
@@ -43,7 +43,7 @@ public class ExaminationService {
         return result;
     }
 
-    public ResponseMessage deleteNationById(int id) {
+    public ResponseMessage deleteExaminationById(int id) {
         ResponseMessage message = new ResponseMessage();
         var isResult = examinationRepository.findById(id);
         if(isResult.isPresent()){
