@@ -17,7 +17,7 @@ public class OfficerController {
     @Autowired
     private OfficerService officerService;
 
-    @PostMapping("")
+    @PostMapping()
     public Officer createOfficer(@RequestBody Officer officer) {
         return officerService.createOfficer(officer);
     }
@@ -27,7 +27,7 @@ public class OfficerController {
         return officerService.updateOfficer(officer, id);
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<Officer> officerList() {
         return officerService.officerList();
     }

@@ -17,7 +17,7 @@ public class NationController {
     @Autowired
     private NationService nationService;
 
-    @PostMapping("")
+    @PostMapping()
     public Nation createNation(@RequestBody Nation nation) {
         return nationService.createNation(nation);
     }
@@ -32,7 +32,7 @@ public class NationController {
         return nationService.findNationById(id);
     }
 
-    @GetMapping("")
+    @GetMapping()
     public List<Nation> nationList() {
         return nationService.nationList();
     }

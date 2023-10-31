@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("profile")
+@RequestMapping("/profile")
 public class ProfileController {
     @Autowired
     private ProfileService service;
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Profile> createProfile(@RequestParam("name") String name,
                                         @RequestParam("dateofbirth")LocalDate dateofbirth,
                                         @RequestParam("sex") String sex,
@@ -84,7 +84,7 @@ public class ProfileController {
         return new ResponseEntity<>(service.updateProfile(profile, image, id), HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<List<Profile>> getAllProfile() {
         return new ResponseEntity<>(service.listProfile(), HttpStatus.OK);
     }

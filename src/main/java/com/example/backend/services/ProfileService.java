@@ -76,9 +76,6 @@ public class ProfileService {
 
     public List<Profile> listProfile() {
         var result = profileRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
         return result;
     }
 
