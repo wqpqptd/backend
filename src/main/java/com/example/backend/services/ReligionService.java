@@ -38,9 +38,6 @@ public class ReligionService {
 
     public List<Religion> religionList() {
         var result = religionRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
         return result;
     }
 
