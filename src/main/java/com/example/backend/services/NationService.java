@@ -47,6 +47,9 @@ public class NationService {
 
     public List<Nation> nationList() {
         var result = nationRepository.findAll();
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
+        }
         return result;
     }
 

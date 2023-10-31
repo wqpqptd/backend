@@ -18,27 +18,27 @@ public class NationController {
     private NationService nationService;
 
     @PostMapping()
-    public Nation createNation(@RequestBody Nation nation) {
-        return nationService.createNation(nation);
+    public ResponseEntity<Nation> createNation(@RequestBody Nation nation) {
+        return new ResponseEntity<>(nationService.createNation(nation), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public Optional<Nation> updateNation(@RequestBody Nation nation, @PathVariable(name = "id") int id) {
-        return nationService.updateNation(nation, id);
+    public ResponseEntity<Optional<Nation>> updateNation(@RequestBody Nation nation, @PathVariable(name = "id") int id) {
+        return ResponseEntity.ok(nationService.updateNation(nation, id));
     }
 
     @GetMapping("/{id}")
-    public Optional<Nation> findNationById(@PathVariable(name = "id") int id) {
-        return nationService.findNationById(id);
+    public ResponseEntity<Optional<Nation>> findNationById(@PathVariable(name = "id") int id) {
+        return ResponseEntity.ok(nationService.findNationById(id));
     }
 
     @GetMapping()
-    public List<Nation> nationList() {
-        return nationService.nationList();
+    public ResponseEntity<List<Nation>> nationList() {
+        return ResponseEntity.ok(nationService.nationList());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessage> deleteNationById(@PathVariable(name = "id") int id) {
-        return new ResponseEntity<>(nationService.deleteNationById(id), HttpStatus.OK);
+        return ResponseEntity.ok(nationService.deleteNationById(id));
     }
 }

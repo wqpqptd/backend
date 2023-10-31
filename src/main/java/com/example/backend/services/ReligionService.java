@@ -25,8 +25,8 @@ public class ReligionService {
         return religion;
     }
 
-    public Optional<Religion> updateReligion(Religion religion, int id) {
-        var update = religionRepository.findById(id).map(result -> {
+    public Optional<Religion> updateReligion(Religion religion) {
+        var update = religionRepository.findById(religion.getId()).map(result -> {
             result.setReligionName(religion.getReligionName());
             return religionRepository.save(result);
         });
@@ -38,6 +38,9 @@ public class ReligionService {
 
     public List<Religion> religionList() {
         var result = religionRepository.findAll();
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
+        }
         return result;
     }
 

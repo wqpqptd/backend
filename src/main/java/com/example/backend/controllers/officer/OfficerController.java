@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -18,27 +19,27 @@ public class OfficerController {
     private OfficerService officerService;
 
     @PostMapping()
-    public Officer createOfficer(@RequestBody Officer officer) {
-        return officerService.createOfficer(officer);
+    public ResponseEntity<Officer> createOfficer(@RequestBody Officer officer) {
+        return new ResponseEntity<>(officerService.createOfficer(officer), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public Optional<Officer> updateOfficer(@RequestBody Officer officer, @PathVariable(name = "id") int id) {
-        return officerService.updateOfficer(officer, id);
+    public ResponseEntity<Optional<Officer>> updateOfficer(@RequestBody Officer officer, @PathVariable(name = "id") int id) {
+        return ResponseEntity.ok(officerService.updateOfficer(officer, id));
     }
 
     @GetMapping()
-    public List<Officer> officerList() {
-        return officerService.officerList();
+    public ResponseEntity<List<Officer>> officerList() {
+        return ResponseEntity.ok(officerService.officerList());
     }
 
     @GetMapping("/{id}")
-    public Optional<Officer> findOfficerById(@PathVariable(name = "id") int id) {
-        return officerService.findOfficerById(id);
+    public ResponseEntity<Optional<Officer>> findOfficerById(@PathVariable(name = "id") int id) {
+        return ResponseEntity.ok(officerService.findOfficerById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessage> deleteOfficerById(@PathVariable(name = "id") int id) {
-        return new ResponseEntity<>(officerService.deleteProfileById(id), HttpStatus.OK);
+        return ResponseEntity.ok(officerService.deleteProfileById(id));
     }
 }

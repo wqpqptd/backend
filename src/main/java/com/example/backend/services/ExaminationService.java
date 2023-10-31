@@ -40,6 +40,9 @@ public class ExaminationService {
 
     public List<Examinations> examinationsList() {
         var result = examinationRepository.findAll();
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
+        }
         return result;
     }
 
@@ -48,9 +51,9 @@ public class ExaminationService {
         var isResult = examinationRepository.findById(id);
         if(isResult.isPresent()){
             examinationRepository.deleteById(id);
-            message.setMessage("delete officer by id successfully!");
+            message.setMessage("delete examination by id successfully!");
         }else{
-            message.setMessage("delete officer by id failed!");
+            message.setMessage("delete examination by id failed!");
         }
         return message;
     }

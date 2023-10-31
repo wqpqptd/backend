@@ -20,23 +20,23 @@ public class ExaminationController {
     private ExaminationService examinationService;
 
     @PostMapping()
-    public Examinations createExamination(@RequestBody Examinations examination) {
-        return examinationService.createExamination(examination);
+    public ResponseEntity<Examinations> createExamination(@RequestBody Examinations examination) {
+        return new ResponseEntity<>(examinationService.createExamination(examination), HttpStatus.CREATED);
     }
     @PatchMapping("/{id}")
-    public Examinations updateExamination(@RequestBody Examinations examination, @PathVariable int id) {
+    public ResponseEntity<Examinations> updateExamination(@RequestBody Examinations examination, @PathVariable int id) {
         examination.setId(id);
-        return examinationService.updateExamination(examination);
+        return ResponseEntity.ok(examinationService.updateExamination(examination));
     }
 
     @GetMapping("/{id}")
-    public Examinations findExaminationById(@PathVariable(name = "id") int id) {
-        return examinationService.findExaminationById(id);
+    public ResponseEntity<Examinations> findExaminationById(@PathVariable(name = "id") int id) {
+        return ResponseEntity.ok(examinationService.findExaminationById(id));
     }
 
     @GetMapping()
-    public List<Examinations> examinationsList() {
-        return examinationService.examinationsList();
+    public ResponseEntity<List<Examinations>> examinationsList() {
+        return ResponseEntity.ok(examinationService.examinationsList());
     }
 
     @DeleteMapping("/{id}")

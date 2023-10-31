@@ -50,6 +50,9 @@ public class OfficerService {
 
     public List<Officer> officerList() {
         var result = officerRepository.findAll();
+        if (result.isEmpty()) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
+        }
         return result;
     }
 

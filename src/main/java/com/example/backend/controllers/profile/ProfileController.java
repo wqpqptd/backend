@@ -81,22 +81,22 @@ public class ProfileController {
         profile.setDistrict(district);
         profile.setWards(wards);
         profile.setExaminationsId(Integer.parseInt(examinations_id));
-        return new ResponseEntity<>(service.updateProfile(profile, image, id), HttpStatus.OK);
+        return ResponseEntity.ok(service.updateProfile(profile, image, id));
     }
 
     @GetMapping()
     public ResponseEntity<List<Profile>> getAllProfile() {
-        return new ResponseEntity<>(service.listProfile(), HttpStatus.OK);
+        return ResponseEntity.ok(service.listProfile());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Profile>> getProfileById(@PathVariable(value = "id") int id) {
-        return new ResponseEntity<>(service.findProfileById(id), HttpStatus.OK);
+        return ResponseEntity.ok(service.findProfileById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessage> deleteProfileById(@PathVariable(value = "id") int id) {
-        return new ResponseEntity<>(service.deleteProfileById(id), HttpStatus.OK);
+        return ResponseEntity.ok(service.deleteProfileById(id));
     }
 
 }
