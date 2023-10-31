@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("officer")
+@RequestMapping("/officer")
 public class OfficerController {
     @Autowired
     private OfficerService officerService;
