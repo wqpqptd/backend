@@ -43,7 +43,7 @@ public class ProfileService {
     public Profile updateProfile(Profile profile, MultipartFile image, int id) {
 
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\intellij\\backend\\uploads";
+        String uploadDir = root;
         String filePath = Paths.get(uploadDir, fileName).toString();
         FileUploadUtil.saveFile(uploadDir, fileName, image);
         profile.setImage(filePath);

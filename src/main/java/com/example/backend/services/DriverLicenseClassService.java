@@ -5,10 +5,11 @@ import com.example.backend.entities.DriverLicenseClass;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.DriverLicenseClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class DriverLicenseClassService {
     @Autowired
     private DriverLicenseClassRepository driverLicenseClassRepository;
