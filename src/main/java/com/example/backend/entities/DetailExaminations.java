@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.util.Optional;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +18,26 @@ public class DetailExaminations {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    @Column(name = "officer_id")
-    private int officerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Officer_id")
+    private Officer officerId;
     @NotNull
-    @Column(name = "Examinations_id")
-    private int examinationsId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Examinations_id")
+    private Examinations examinationsId;
+
+    public void setOfficerId(int officerId) {
+    }
+
+    public void setExaminationsId(int examinationId) {
+    }
+
+    public void setOfficer(Officer officer) {
+        this.officerId = officer;
+    }
+
+    public void setExaminations(Examinations examinations) {
+        this.examinationsId = examinations;
+    }
+
 }

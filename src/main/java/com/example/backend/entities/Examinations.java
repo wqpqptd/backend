@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +26,10 @@ public class Examinations {
     @NotNull
     @Column(name = "examinations_description")
     private String examinationsDescription;
+
+    public Examinations(String examinationsName, LocalDate examinationsDate, String examinationsDescription) {
+        this.examinationsName = examinationsName;
+        this.examinationsDate = examinationsDate;
+        this.examinationsDescription = examinationsDescription;
+    }
 }

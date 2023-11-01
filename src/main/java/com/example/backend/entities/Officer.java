@@ -24,4 +24,10 @@ public class Officer {
     @NotNull
     @Column(name = "email")
     private String email;
+
+    public Officer(String name, String phone, String email) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
 }

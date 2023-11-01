@@ -20,21 +20,25 @@ public class ExaminationService {
         return examinationRepository.save(examination);
     }
 
-    public Examinations updateExamination(Examinations examination) {
-        var retrieved = examinationRepository.findById(examination.getId());
-        if (retrieved.isEmpty()) {
+    public Optional<Examinations> updateExamination(Examinations examination) {
+        var result = examinationRepository.findById(examination.getId()).map(update -> {
+            update.setExaminationsName(examination.getExaminationsName());
+            update.setExaminationsDate(examination.getExaminationsDate());
+            update.setExaminationsDescription(examination.getExaminationsDescription());
+            return examinationRepository.save(update);
+        });
+        if (result.isEmpty()) {
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
         }
 
-        return examinationRepository.save(examination);
+        return result;
     }
 
-    public Examinations findExaminationById(int id) {
-        var retrieved = examinationRepository.findById(id);
-        if (retrieved.isEmpty()){
+    public Optional<Examinations> findExaminationById(int id) {
+        var result = examinationRepository.findById(id);
+        if (result.isEmpty()){
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
         }
-        var result = retrieved.get();
         return result;
     }
 
