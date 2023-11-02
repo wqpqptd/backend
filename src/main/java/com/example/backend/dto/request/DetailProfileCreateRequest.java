@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @RequiredArgsConstructor
 public class DetailProfileCreateRequest {
-    private LocalDate dateExamination;
+//    private LocalDate dateExamination;
     private Double resultTheoretical;
     private Double resultPractice;
     private int profileId;

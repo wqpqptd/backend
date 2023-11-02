@@ -48,7 +48,6 @@ public class DetailProfileService {
 
 
             DetailProfile detailProfile = new DetailProfile();
-            detailProfile.setDateExamination(detailProfileCreateRequest.getDateExamination());
             detailProfile.setResultTheoretical(detailProfileCreateRequest.getResultTheoretical());
             detailProfile.setResultPractice(detailProfileCreateRequest.getResultPractice());
             detailProfile.setProfile(profile);
@@ -70,7 +69,6 @@ public class DetailProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getProfileId()));
 
         return detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
-            update.setDateExamination(detailProfileUpdateRequest.getDateExamination());
             update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
             update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
             update.setProfileId(profile);
@@ -96,7 +94,6 @@ public class DetailProfileService {
                 .map(tmp -> {
                     DetailProfileResponse response = new DetailProfileResponse();
                     response.setId(tmp.getId());
-                    response.setDateExamination(tmp.getDateExamination());
                     response.setResultTheoretical(tmp.getResultTheoretical());
                     response.setResultPractice(tmp.getResultPractice());
                     Profile profile = tmp.getProfileId();
@@ -146,12 +143,10 @@ public class DetailProfileService {
                 .map(tmp -> {
                     DetailProfileResponse response = new DetailProfileResponse();
                     response.setId(tmp.getId());
-                    response.setDateExamination(tmp.getDateExamination());
                     response.setResultTheoretical(tmp.getResultTheoretical());
                     response.setResultPractice(tmp.getResultPractice());
                     Profile profile = tmp.getProfileId();
                     if (profile != null) {
-                        response.setId(profile.getId());
                         response.setName(profile.getName());
                         response.setSex(profile.getSex());
                         response.setIdcard(profile.getIdcard());

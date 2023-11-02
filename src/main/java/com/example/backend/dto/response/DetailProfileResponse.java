@@ -19,7 +19,6 @@ public class DetailProfileResponse {
     private LocalDate dateExamination;
     private Double resultTheoretical;
     private Double resultPractice;
-    private int profileId;
     private String name;
     private String sex;
     private String idcard;

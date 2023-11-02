@@ -18,9 +18,6 @@ public class DetailProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @NotNull
-    @Column(name = "date_examination")
-    private LocalDate dateExamination;
-    @NotNull
     @JoinColumn(name = "result_theoretical")
     private Double resultTheoretical;
     @NotNull
