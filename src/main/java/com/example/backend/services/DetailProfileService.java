@@ -74,9 +74,10 @@ public class DetailProfileService {
             update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
             update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
             update.setProfileId(profile);
+
             if (detailProfileUpdateRequest.getDriverLicenseId() == 0 ||
-                    detailProfileUpdateRequest.getResultPractice() < 50.0 ||
-                    detailProfileUpdateRequest.getResultTheoretical() < 50.0) {
+                    detailProfileUpdateRequest.getResultPractice() < 50.0 || detailProfileUpdateRequest.getResultPractice() > 100.0 ||
+                    detailProfileUpdateRequest.getResultTheoretical() < 50.0 || detailProfileUpdateRequest.getResultTheoretical() > 100.0) {
                 update.setDriverLicenseId(null);
             } else {
                 DriverLicense driverLicense = driverLicenseRepository.findById(detailProfileUpdateRequest.getDriverLicenseId())
