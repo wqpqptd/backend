@@ -26,12 +26,6 @@ public class DetailExaminations {
     @JoinColumn(name = "Examinations_id")
     private Examinations examinationsId;
 
-    public void setOfficerId(int officerId) {
-    }
-
-    public void setExaminationsId(int examinationId) {
-    }
-
     public void setOfficer(Officer officer) {
         this.officerId = officer;
     }

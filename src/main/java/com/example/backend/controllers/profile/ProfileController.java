@@ -1,5 +1,7 @@
 package com.example.backend.controllers.profile;
 
+import com.example.backend.dto.request.ProfileCreateRequest;
+import com.example.backend.dto.request.ProfileUpdateRequest;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.Profile;
 import com.example.backend.services.ProfileService;
@@ -19,7 +21,7 @@ public class ProfileController {
     @Autowired
     private ProfileService service;
 
-    @PostMapping()
+    @PostMapping("")
     public ResponseEntity<Profile> createProfile(@RequestParam("name") String name,
                                         @RequestParam("dateofbirth")LocalDate dateofbirth,
                                         @RequestParam("sex") String sex,
@@ -34,54 +36,54 @@ public class ProfileController {
                                         @RequestParam("wards") String wards,
                                         @RequestParam("examinations_id") String examinations_id ) {
 
-            Profile profile = new Profile();
-            profile.setName(name);
-            profile.setDateofbirth(dateofbirth);
-            profile.setSex(sex);
-            profile.setIdcard(idcard);
-            profile.setPhone(phone);
-            profile.setNote(note);
-            profile.setNationId(Integer.parseInt(nation_id));
-            profile.setReligionId(Integer.parseInt(religion_id));
-            profile.setProvince(province);
-            profile.setDistrict(district);
-            profile.setWards(wards);
-            profile.setExaminationsId(Integer.parseInt(examinations_id));
-            return new ResponseEntity<>(service.createProfile(profile, image), HttpStatus.CREATED);
+        ProfileCreateRequest profileCreateRequest = new ProfileCreateRequest();
+        profileCreateRequest.setName(name);
+        profileCreateRequest.setDateofbirth(dateofbirth);
+        profileCreateRequest.setSex(sex);
+        profileCreateRequest.setIdcard(idcard);
+        profileCreateRequest.setPhone(phone);
+        profileCreateRequest.setNote(note);
+        profileCreateRequest.setNationId(Integer.parseInt(nation_id));
+        profileCreateRequest.setReligionId(Integer.parseInt(religion_id));
+        profileCreateRequest.setProvince(province);
+        profileCreateRequest.setDistrict(district);
+        profileCreateRequest.setWards(wards);
+        profileCreateRequest.setExaminationsId(Integer.parseInt(examinations_id));
+            return new ResponseEntity<>(service.createProfile(profileCreateRequest, image), HttpStatus.CREATED);
 
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Profile> updateProfile(@PathVariable(value = "id") int id,
-                                 @RequestParam("name") String name,
-                                 @RequestParam("dateofbirth")LocalDate dateofbirth,
-                                 @RequestParam("sex") String sex,
-                                 @RequestParam("idcard") String idcard,
-                                 @RequestParam("phone") String phone,
-                                 @RequestParam("image") MultipartFile image,
-                                 @RequestParam("note") String note,
-                                 @RequestParam("nation_id") String nation_id,
-                                 @RequestParam("religion_id") String religion_id,
-                                 @RequestParam("province") String province,
-                                 @RequestParam("district") String district,
-                                 @RequestParam("wards") String wards,
-                                 @RequestParam("examinations_id") String examinations_id ) {
+    public ResponseEntity<Optional<Profile>> updateProfile(@PathVariable(value = "id") int id,
+                                                           @RequestParam("name") String name,
+                                                           @RequestParam("dateofbirth")LocalDate dateofbirth,
+                                                           @RequestParam("sex") String sex,
+                                                           @RequestParam("idcard") String idcard,
+                                                           @RequestParam("phone") String phone,
+                                                           @RequestParam("image") MultipartFile image,
+                                                           @RequestParam("note") String note,
+                                                           @RequestParam("nation_id") String nation_id,
+                                                           @RequestParam("religion_id") String religion_id,
+                                                           @RequestParam("province") String province,
+                                                           @RequestParam("district") String district,
+                                                           @RequestParam("wards") String wards,
+                                                           @RequestParam("examinations_id") String examinations_id ) {
 
 
-        Profile profile = new Profile();
-        profile.setName(name);
-        profile.setDateofbirth(dateofbirth);
-        profile.setSex(sex);
-        profile.setIdcard(idcard);
-        profile.setPhone(phone);
-        profile.setNote(note);
-        profile.setNationId(Integer.parseInt(nation_id));
-        profile.setReligionId(Integer.parseInt(religion_id));
-        profile.setProvince(province);
-        profile.setDistrict(district);
-        profile.setWards(wards);
-        profile.setExaminationsId(Integer.parseInt(examinations_id));
-        return ResponseEntity.ok(service.updateProfile(profile, image, id));
+        ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
+        profileUpdateRequest.setName(name);
+        profileUpdateRequest.setDateofbirth(dateofbirth);
+        profileUpdateRequest.setSex(sex);
+        profileUpdateRequest.setIdcard(idcard);
+        profileUpdateRequest.setPhone(phone);
+        profileUpdateRequest.setNote(note);
+        profileUpdateRequest.setNationId(Integer.parseInt(nation_id));
+        profileUpdateRequest.setReligionId(Integer.parseInt(religion_id));
+        profileUpdateRequest.setProvince(province);
+        profileUpdateRequest.setDistrict(district);
+        profileUpdateRequest.setWards(wards);
+        profileUpdateRequest.setExaminationsId(Integer.parseInt(examinations_id));
+        return ResponseEntity.ok(service.updateProfile(profileUpdateRequest, image, id));
     }
 
     @GetMapping()

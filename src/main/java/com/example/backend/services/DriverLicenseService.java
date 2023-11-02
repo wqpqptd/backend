@@ -1,14 +1,18 @@
 package com.example.backend.services;
 
+import com.example.backend.dto.request.DriverLicenseCreateRequest;
+import com.example.backend.dto.request.DriverLicenseUpdateRequest;
 import com.example.backend.dto.response.DriverLicenseResponse;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.DriverLicense;
 import com.example.backend.entities.DriverLicenseClass;
 import com.example.backend.entities.DriverLicenseDuration;
+import com.example.backend.entities.Officer;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.DriverLicenseClassRepository;
 import com.example.backend.repositories.DriverLicenseDurationRepository;
 import com.example.backend.repositories.DriverLicenseRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,22 +30,33 @@ public class DriverLicenseService {
     @Autowired
     private DriverLicenseDurationRepository driverLicenseDurationRepository;
 
-    public DriverLicense createDriverLicense(DriverLicense driverLicense) {
-        DriverLicense result;
-        try {
-            result = driverLicenseRepository.save(driverLicense);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return result;
+    public DriverLicense createDriverLicense(DriverLicenseCreateRequest driverLicenseCreateRequest) {
+        DriverLicenseClass aClass = driverLicenseClassRepository.findById(driverLicenseCreateRequest.getDriverLicenseClassId())
+                .orElseThrow(() -> new EntityNotFoundException("driverLicenseCreateRequest not found with ID: " + driverLicenseCreateRequest.getDriverLicenseClassId()));
+
+        DriverLicenseDuration duration = driverLicenseDurationRepository.findById(driverLicenseCreateRequest.getDriverLicenseDurationId())
+                .orElseThrow(() -> new EntityNotFoundException("driverLicenseCreateRequest not found with ID: " + driverLicenseCreateRequest.getDriverLicenseDurationId()));
+
+        DriverLicense driverLicense = new DriverLicense();
+        driverLicense.setLicenseDate(driverLicenseCreateRequest.getLicenseDate());
+        driverLicense.setCode(driverLicenseCreateRequest.getCode());
+        driverLicense.setDriverLicenseClassId(aClass);
+        driverLicense.setDriverLicenseDurationId(duration);
+        return driverLicenseRepository.save(driverLicense);
     }
 
-    public Optional<DriverLicense> updateDriverLicense(DriverLicense driverLicense) {
-        var result = driverLicenseRepository.findById(driverLicense.getId()).map(update -> {
-            update.setLicenseDate(driverLicense.getLicenseDate());
-            update.setCode(driverLicense.getCode());
-            update.setDriverLicenseClassId(driverLicense.getDriverLicenseClassId());
-            update.setDriverLicenseDurationId(driverLicense.getDriverLicenseDurationId());
+    public Optional<DriverLicense> updateDriverLicense(DriverLicenseUpdateRequest driverLicenseUpdateRequest) {
+        DriverLicenseClass aClass = driverLicenseClassRepository.findById(driverLicenseUpdateRequest.getDriverLicenseClassId())
+                .orElseThrow(() -> new EntityNotFoundException("driverLicenseUpdateRequest not found with ID: " + driverLicenseUpdateRequest.getDriverLicenseClassId()));
+
+        DriverLicenseDuration duration = driverLicenseDurationRepository.findById(driverLicenseUpdateRequest.getDriverLicenseDurationId())
+                .orElseThrow(() -> new EntityNotFoundException("driverLicenseUpdateRequest not found with ID: " + driverLicenseUpdateRequest.getDriverLicenseDurationId()));
+
+        var result = driverLicenseRepository.findById(driverLicenseUpdateRequest.getId()).map(update -> {
+            update.setLicenseDate(driverLicenseUpdateRequest.getLicenseDate());
+            update.setCode(driverLicenseUpdateRequest.getCode());
+            update.setDriverLicenseClassId(aClass);
+            update.setDriverLicenseDurationId(duration);
             return driverLicenseRepository.save(update);
         });
         if (result.isEmpty()) {
@@ -76,10 +91,10 @@ public class DriverLicenseService {
 
     public Optional<DriverLicenseResponse> findDriverLicenseById(int id) {
         var result = driverLicenseRepository.findById(id).map(driverLicense -> {
-            String driverLicenseClassName = driverLicenseClassRepository.findById(driverLicense.getDriverLicenseClassId()).map(DriverLicenseClass::getDriverLicenseClassName)
+            String driverLicenseClassName = driverLicenseClassRepository.findById(driverLicense.getDriverLicenseClassId().getId()).map(DriverLicenseClass::getDriverLicenseClassName)
                     .orElse(null);
 
-            String durationName = driverLicenseDurationRepository.findById(driverLicense.getDriverLicenseDurationId()).map(DriverLicenseDuration::getDuration)
+            String durationName = driverLicenseDurationRepository.findById(driverLicense.getDriverLicenseDurationId().getId()).map(DriverLicenseDuration::getDuration)
                     .orElse(null);
 
             DriverLicenseResponse driverLicenseResponse = new DriverLicenseResponse();

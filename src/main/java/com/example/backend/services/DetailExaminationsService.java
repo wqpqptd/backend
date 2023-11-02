@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -31,10 +30,10 @@ public class DetailExaminationsService {
 
     public DetailExaminations createDetailExaminations(DetailExaminationCreateRequest detailExaminationCreateRequest) {
         Officer officer = officerRepository.findById(detailExaminationCreateRequest.getOfficerId())
-                .orElseThrow(() -> new EntityNotFoundException("Officer not found with ID: " + detailExaminationCreateRequest.getOfficerId()));
+                .orElseThrow(() -> new EntityNotFoundException("detailExaminationCreateRequest not found with ID: " + detailExaminationCreateRequest.getOfficerId()));
 
         Examinations examinations = examinationRepository.findById(detailExaminationCreateRequest.getExaminationsId())
-                .orElseThrow(() -> new EntityNotFoundException("Examinations not found with ID: " + detailExaminationCreateRequest.getExaminationsId()));
+                .orElseThrow(() -> new EntityNotFoundException("detailExaminationCreateRequest not found with ID: " + detailExaminationCreateRequest.getExaminationsId()));
 
         DetailExaminations detailExaminations = new DetailExaminations();
         detailExaminations.setOfficer(officer);
@@ -45,10 +44,10 @@ public class DetailExaminationsService {
 
     public Optional<DetailExaminations> updateDetailExaminations(DetailExaminationUpdateRequest detailExaminationUpdateRequest) {
         Officer officer = officerRepository.findById(detailExaminationUpdateRequest.getOfficerId())
-                .orElseThrow(() -> new EntityNotFoundException("Officer not found with ID: " + detailExaminationUpdateRequest.getOfficerId()));
+                .orElseThrow(() -> new EntityNotFoundException("detailExaminationUpdateRequest not found with ID: " + detailExaminationUpdateRequest.getOfficerId()));
 
         Examinations examinations = examinationRepository.findById(detailExaminationUpdateRequest.getExaminationsId())
-                .orElseThrow(() -> new EntityNotFoundException("Examinations not found with ID: " + detailExaminationUpdateRequest.getExaminationsId()));
+                .orElseThrow(() -> new EntityNotFoundException("detailExaminationUpdateRequest not found with ID: " + detailExaminationUpdateRequest.getExaminationsId()));
 
         var result = detailExaminationsRepository.findById(detailExaminationUpdateRequest.getId()).map(update -> {
             update.setOfficer(officer);

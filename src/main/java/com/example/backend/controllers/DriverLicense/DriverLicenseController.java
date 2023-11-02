@@ -1,5 +1,7 @@
 package com.example.backend.controllers.DriverLicense;
 
+import com.example.backend.dto.request.DriverLicenseCreateRequest;
+import com.example.backend.dto.request.DriverLicenseUpdateRequest;
 import com.example.backend.dto.response.DriverLicenseResponse;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.DriverLicense;
@@ -21,14 +23,14 @@ public class DriverLicenseController {
 
 
     @PostMapping("")
-    public ResponseEntity<DriverLicense> createDriverLicense(@RequestBody DriverLicense driverLicense) {
-        return new ResponseEntity<>(driverLicenseService.createDriverLicense(driverLicense), HttpStatus.CREATED);
+    public ResponseEntity<DriverLicense> createDriverLicense(@RequestBody DriverLicenseCreateRequest driverLicenseCreateRequest) {
+        return new ResponseEntity<>(driverLicenseService.createDriverLicense(driverLicenseCreateRequest), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Optional<DriverLicense>> updateDriverLicense(@RequestBody DriverLicense driverLicense, @PathVariable(name = "id") int id) {
-        driverLicense.setId(id);
-        return ResponseEntity.ok(driverLicenseService.updateDriverLicense(driverLicense));
+    public ResponseEntity<Optional<DriverLicense>> updateDriverLicense(@RequestBody DriverLicenseUpdateRequest driverLicenseUpdateRequest, @PathVariable(name = "id") int id) {
+        driverLicenseUpdateRequest.setId(id);
+        return ResponseEntity.ok(driverLicenseService.updateDriverLicense(driverLicenseUpdateRequest));
     }
 
     @GetMapping("")

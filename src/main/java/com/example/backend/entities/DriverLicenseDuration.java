@@ -15,7 +15,6 @@ public class DriverLicenseDuration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
     @Column(name = "driver_license_duration")
     private String duration;
 }

@@ -1,5 +1,6 @@
 package com.example.backend.entities;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,9 +24,11 @@ public class DriverLicense {
     @Column(name = "code")
     private int code;
     @NotNull
-    @Column(name = "driver_license_class_id")
-    private int driverLicenseClassId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_license_class_id")
+    private DriverLicenseClass driverLicenseClassId;
     @NotNull
-    @Column(name = "driver_license_duration_id")
-    private int driverLicenseDurationId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "driver_license_duration_id")
+    private DriverLicenseDuration driverLicenseDurationId;
 }

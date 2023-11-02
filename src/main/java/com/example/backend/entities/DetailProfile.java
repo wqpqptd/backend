@@ -21,24 +21,31 @@ public class DetailProfile {
     @Column(name = "date_examination")
     private LocalDate dateExamination;
     @NotNull
-    @Column(name = "result_theoretical")
+    @JoinColumn(name = "result_theoretical")
     private Double resultTheoretical;
     @NotNull
-    @Column(name = "result_practice")
+    @JoinColumn(name = "result_practice")
     private Double resultPractice;
     @NotNull
-    @Column(name = "profile_id")
-    private int profileId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profileId;
     @NotNull
-    @Column(name = "profile_nation_id")
-    private int nationId;
-    @NotNull
-    @Column(name = "profile_religion_id")
-    private int religionId;
-    @NotNull
-    @Column(name = "driver_license_id")
-    private int driverLicenseId;
-    @NotNull
-    @Column(name = "examinations_id")
-    private int examinationsId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "driver_license_id")
+    private DriverLicense driverLicenseId;
+
+
+
+    public void setProfile(Profile profile) {
+        this.profileId = profile;
+    }
+
+    public void setDriverLicenseId(DriverLicense driverLicense) {
+        this.driverLicenseId=driverLicense;
+    }
+
+    public void setDriverLicenseId(int driverLicenseId) {
+
+    }
 }

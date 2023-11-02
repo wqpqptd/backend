@@ -15,7 +15,8 @@ public class DriverLicenseClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
     @Column(name = "driver_license_class_name")
     private String driverLicenseClassName;
+
+
 }
