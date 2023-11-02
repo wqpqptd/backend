@@ -22,7 +22,7 @@ public class DriverLicense {
     private LocalDate licenseDate;
     @NotNull
     @Column(name = "code")
-    private int code;
+    private Long code;
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "driver_license_class_id")

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class DriverLicenseResponse {
     private int id;
     private LocalDate licenseDate;
-    private int code;
+    private long code;
     private String driverLicenseClassName;
     private String driverLicenseDurationName;
 }

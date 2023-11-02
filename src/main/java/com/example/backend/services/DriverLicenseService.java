@@ -41,10 +41,10 @@ public class DriverLicenseService {
         Random random = new Random();
         StringBuilder randomSequence = new StringBuilder();
         for (int i = 0; i < 10; i++) {
-            int randomNumber = random.nextInt(10); // Tạo số ngẫu nhiên từ 0 đến 9
+            long randomNumber = random.nextInt(10);
             randomSequence.append(randomNumber);
         }
-        int code = Integer.parseInt(randomSequence.toString());
+        Long code = Long.parseLong(randomSequence.toString());
 
         DriverLicense driverLicense = new DriverLicense();
         driverLicense.setLicenseDate(driverLicenseCreateRequest.getLicenseDate());

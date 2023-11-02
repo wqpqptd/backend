@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class DriverLicenseUpdateRequest {
     private int id;
     private LocalDate licenseDate;
-    private int code;
+    private Long code;
     private int driverLicenseClassId;
     private int driverLicenseDurationId;
 }
