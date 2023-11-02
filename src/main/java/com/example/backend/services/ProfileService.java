@@ -10,15 +10,21 @@ import com.example.backend.repositories.ExaminationRepository;
 import com.example.backend.repositories.NationRepository;
 import com.example.backend.repositories.ProfileRepository;
 import com.example.backend.repositories.ReligionRepository;
+import jakarta.annotation.Resource;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileItemFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
@@ -134,11 +140,15 @@ public class ProfileService {
     public ResponseMessage deleteProfileById(int id) {
         ResponseMessage message = new ResponseMessage();
         var isResult = profileRepository.findById(id);
-        if(isResult.isPresent()){
+        try {
+            String fileName = isResult.get().getImage().substring(isResult.get().getImage().lastIndexOf('/') + 1);
+            Path imagePath = Paths.get("uploads", fileName);
+            Files.deleteIfExists(imagePath);
             profileRepository.deleteById(id);
-            message.setMessage("delete profile by id successfully!");
-        }else{
-            message.setMessage("delete profile by id failed!");
+            message.setMessage("delete religion by id successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            message.setMessage("delete religion by id failed!");
         }
         return message;
     }
