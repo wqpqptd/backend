@@ -31,4 +31,5 @@ public class DriverLicense {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "driver_license_duration_id")
     private DriverLicenseDuration driverLicenseDurationId;
+
 }

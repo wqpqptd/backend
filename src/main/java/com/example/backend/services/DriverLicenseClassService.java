@@ -15,29 +15,18 @@ public class DriverLicenseClassService {
     private DriverLicenseClassRepository driverLicenseClassRepository;
 
     public DriverLicenseClass createDriverLicenseClass(DriverLicenseClass driverLicenseClass) {
-        DriverLicenseClass create;
-        try {
-            create = driverLicenseClassRepository.save(driverLicenseClass);
-        }catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return create;
+        return driverLicenseClassRepository.save(driverLicenseClass);
     }
 
     public Optional<DriverLicenseClass> updateDriverLicenseClass(DriverLicenseClass driverLicenseClass) {
-        var result = driverLicenseClassRepository.findById(driverLicenseClass.getId()).map(update -> {
+        return driverLicenseClassRepository.findById(driverLicenseClass.getId()).map(update -> {
             update.setDriverLicenseClassName(driverLicenseClass.getDriverLicenseClassName());
             return driverLicenseClassRepository.save(update);
         });
-        if (result.isEmpty()){
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-        return result;
     }
 
     public List<DriverLicenseClass> DriverLicenseClassList() {
-        var result = driverLicenseClassRepository.findAll();
-        return result;
+        return driverLicenseClassRepository.findAll();
     }
 
     public Optional<DriverLicenseClass> findDriverLicenseClassById(int id) {

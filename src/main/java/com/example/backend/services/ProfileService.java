@@ -104,7 +104,7 @@ public class ProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getExaminationsId()));
 
 
-        var result = profileRepository.findById(id).map(profile -> {
+        return profileRepository.findById(id).map(profile -> {
             profile.setName(profileUpdateRequest.getName());
             profile.setDateofbirth(profileUpdateRequest.getDateofbirth());
             profile.setSex(profileUpdateRequest.getSex());
@@ -120,18 +120,10 @@ public class ProfileService {
             profile.setExaminations(examinations);
             return profileRepository.save(profile);
         });
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-        return result;
     }
 
     public List<Profile> listProfile() {
-        var result = profileRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-        return result;
+        return profileRepository.findAll();
     }
 
     public Optional<Profile> findProfileById(int id) {

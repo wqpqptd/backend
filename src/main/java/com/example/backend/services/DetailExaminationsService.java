@@ -49,19 +49,15 @@ public class DetailExaminationsService {
         Examinations examinations = examinationRepository.findById(detailExaminationUpdateRequest.getExaminationsId())
                 .orElseThrow(() -> new EntityNotFoundException("detailExaminationUpdateRequest not found with ID: " + detailExaminationUpdateRequest.getExaminationsId()));
 
-        var result = detailExaminationsRepository.findById(detailExaminationUpdateRequest.getId()).map(update -> {
+        return detailExaminationsRepository.findById(detailExaminationUpdateRequest.getId()).map(update -> {
             update.setOfficer(officer);
             update.setExaminations(examinations);
             return detailExaminationsRepository.save(update);
         });
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
-        }
-        return result;
     }
 
     public List<DetailExaminationsResponse> DetailExaminationsList() {
-        var result = detailExaminationsRepository.findAll()
+         return detailExaminationsRepository.findAll()
                 .stream()
                 .map(tmp -> {
                     DetailExaminationsResponse response = new DetailExaminationsResponse();
@@ -83,11 +79,6 @@ public class DetailExaminationsService {
                     return response;
                 })
                 .collect(Collectors.toList());
-        if (result.isEmpty()){
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-
-        return result;
     }
 
     public Optional<DetailExaminationsResponse> findDetailExaminationsById(int id) {

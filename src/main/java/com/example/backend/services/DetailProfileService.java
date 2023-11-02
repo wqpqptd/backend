@@ -70,7 +70,7 @@ public class DetailProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getProfileId()));
 
 
-        var result = detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
+        return detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
             update.setDateExamination(detailProfileUpdateRequest.getDateExamination());
             update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
             update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
@@ -86,14 +86,10 @@ public class DetailProfileService {
 
             return detailProfileRepository.save(update);
         });
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return result;
     }
 
     public List<DetailProfileResponse> detailProfileResponseList() {
-        var result = detailProfileRepository.findAll()
+        return detailProfileRepository.findAll()
                 .stream()
                 .map(tmp -> {
                     DetailProfileResponse response = new DetailProfileResponse();
@@ -141,10 +137,6 @@ public class DetailProfileService {
                     return response;
                 })
                 .collect(Collectors.toList());
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-        return result;
     }
 
     public Optional<DetailProfileResponse> findDetailProfile(int id) {

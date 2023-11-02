@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Data
 public class DriverLicenseCreateRequest {
     private LocalDate licenseDate;
-    private int code;
     private int driverLicenseClassId;
     private int driverLicenseDurationId;
 }

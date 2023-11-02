@@ -21,17 +21,12 @@ public class ExaminationService {
     }
 
     public Optional<Examinations> updateExamination(Examinations examination) {
-        var result = examinationRepository.findById(examination.getId()).map(update -> {
+        return examinationRepository.findById(examination.getId()).map(update -> {
             update.setExaminationsName(examination.getExaminationsName());
             update.setExaminationsDate(examination.getExaminationsDate());
             update.setExaminationsDescription(examination.getExaminationsDescription());
             return examinationRepository.save(update);
         });
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
-        }
-
-        return result;
     }
 
     public Optional<Examinations> findExaminationById(int id) {

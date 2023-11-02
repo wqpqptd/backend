@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,9 +38,17 @@ public class DriverLicenseService {
         DriverLicenseDuration duration = driverLicenseDurationRepository.findById(driverLicenseCreateRequest.getDriverLicenseDurationId())
                 .orElseThrow(() -> new EntityNotFoundException("driverLicenseCreateRequest not found with ID: " + driverLicenseCreateRequest.getDriverLicenseDurationId()));
 
+        Random random = new Random();
+        StringBuilder randomSequence = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            int randomNumber = random.nextInt(10); // Tạo số ngẫu nhiên từ 0 đến 9
+            randomSequence.append(randomNumber);
+        }
+        int code = Integer.parseInt(randomSequence.toString());
+
         DriverLicense driverLicense = new DriverLicense();
         driverLicense.setLicenseDate(driverLicenseCreateRequest.getLicenseDate());
-        driverLicense.setCode(driverLicenseCreateRequest.getCode());
+        driverLicense.setCode(code);
         driverLicense.setDriverLicenseClassId(aClass);
         driverLicense.setDriverLicenseDurationId(duration);
         return driverLicenseRepository.save(driverLicense);
@@ -66,14 +75,6 @@ public class DriverLicenseService {
     }
 
     public List<DriverLicenseResponse> DriverLicenseList() {
-        Map<Integer, String> className = driverLicenseClassRepository.findAll()
-                .stream()
-                .collect(Collectors.toMap(DriverLicenseClass::getId, DriverLicenseClass::getDriverLicenseClassName));
-
-        Map<Integer, String> durationName = driverLicenseDurationRepository.findAll()
-                .stream()
-                .collect(Collectors.toMap(DriverLicenseDuration::getId, DriverLicenseDuration::getDuration));
-
         return driverLicenseRepository.findAll()
                 .stream()
                 .map(tmp -> {
@@ -81,8 +82,15 @@ public class DriverLicenseService {
                     driverLicenseResponse.setId(tmp.getId());
                     driverLicenseResponse.setLicenseDate(tmp.getLicenseDate());
                     driverLicenseResponse.setCode(tmp.getCode());
-                    driverLicenseResponse.setDriverLicenseClassName(className.get(tmp.getDriverLicenseClassId()));
-                    driverLicenseResponse.setDriverLicenseDurationName(durationName.get(tmp.getDriverLicenseDurationId()));
+                    DriverLicenseClass aClass = tmp.getDriverLicenseClassId();
+                    if(aClass != null) {
+                        driverLicenseResponse.setDriverLicenseClassName(aClass.getDriverLicenseClassName());
+
+                    }
+                    DriverLicenseDuration duration = tmp.getDriverLicenseDurationId();
+                    if(duration != null) {
+                        driverLicenseResponse.setDriverLicenseDurationName(duration.getDuration());
+                    }
                     return driverLicenseResponse;
                 })
                 .collect(Collectors.toList());

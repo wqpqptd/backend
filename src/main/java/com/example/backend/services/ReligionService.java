@@ -16,32 +16,18 @@ public class ReligionService {
     private ReligionRepository religionRepository;
 
     public Religion createReligion(Religion religion) {
-        Religion result;
-        try {
-            result = religionRepository.save(religion);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return religion;
+         return religionRepository.save(religion);
     }
 
     public Optional<Religion> updateReligion(Religion religion) {
-        var update = religionRepository.findById(religion.getId()).map(result -> {
+        return religionRepository.findById(religion.getId()).map(result -> {
             result.setReligionName(religion.getReligionName());
             return religionRepository.save(result);
         });
-        if(update.isEmpty()){
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-        return update;
     }
 
     public List<Religion> religionList() {
-        var result = religionRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-        return result;
+        return religionRepository.findAll();
     }
 
     public Optional<Religion> findReligionById(int id) {

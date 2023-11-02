@@ -16,25 +16,14 @@ public class NationService {
     private NationRepository nationRepository;
 
     public Nation createNation(Nation nation) {
-        Nation create;
-        try {
-            create = nationRepository.save(nation);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return create;
+        return nationRepository.save(nation);
     }
 
     public Optional<Nation> updateNation(Nation nation, int id) {
-        var result = nationRepository.findById(id).map(update -> {
+        return nationRepository.findById(id).map(update -> {
             update.setNationName(nation.getNationName());
             return nationRepository.save(update);
         });
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-
-        return result;
     }
 
     public Optional<Nation> findNationById(int id) {
@@ -46,11 +35,7 @@ public class NationService {
     }
 
     public List<Nation> nationList() {
-        var result = nationRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-        return result;
+        return nationRepository.findAll();
     }
 
     public ResponseMessage deleteNationById(int id) {

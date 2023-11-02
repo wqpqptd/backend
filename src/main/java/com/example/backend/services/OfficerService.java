@@ -17,27 +17,18 @@ public class OfficerService {
 
 
     public Officer createOfficer(Officer officer) {
-        Officer result;
-        try {
-            result = officerRepository.save(officer);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-        return result;
+        return officerRepository.save(officer);
+
     }
 
     public Optional<Officer> updateOfficer(Officer officer, int id) {
-        var update = officerRepository.findById(id).map(result -> {
+        return officerRepository.findById(id).map(result -> {
                 result.setId(id);
                 result.setName(officer.getName());
                 result.setPhone(officer.getPhone());
                 result.setEmail(officer.getEmail());
                 return officerRepository.save(result);
             });
-        if (update.isEmpty()){
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-        return update;
     }
 
     public Optional<Officer> findOfficerById(int id){
@@ -49,11 +40,7 @@ public class OfficerService {
     }
 
     public List<Officer> officerList() {
-        var result = officerRepository.findAll();
-        if (result.isEmpty()) {
-            throw new IllegalArgumentException(CustomErrorMessage.NOT_GET_ALL_LIST);
-        }
-        return result;
+         return officerRepository.findAll();
     }
 
     public ResponseMessage deleteProfileById(int id) {

@@ -16,14 +16,7 @@ public class DriverLicenseDurationService {
     private DriverLicenseDurationRepository driverLicenseDurationRepository;
 
     public DriverLicenseDuration createDriverLicenseDuration(DriverLicenseDuration driverLicenseDuration) {
-        DriverLicenseDuration create;
-        try {
-            create = driverLicenseDurationRepository.save(driverLicenseDuration);
-        } catch (Exception e) {
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_CREATE);
-        }
-
-        return create;
+        return driverLicenseDurationRepository.save(driverLicenseDuration);
     }
 
     public Optional<DriverLicenseDuration> updateDriverLicenseDuration(DriverLicenseDuration driverLicenseDuration) {
@@ -38,8 +31,7 @@ public class DriverLicenseDurationService {
     }
 
     public List<DriverLicenseDuration> DriverLicenseDurationList() {
-        var result = driverLicenseDurationRepository.findAll();
-        return result;
+        return driverLicenseDurationRepository.findAll();
     }
 
     public Optional<DriverLicenseDuration> findDriverLicenseDurationById(int id) {
