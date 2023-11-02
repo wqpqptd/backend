@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 public class DetailProfileUpdateRequest {
@@ -16,5 +17,10 @@ public class DetailProfileUpdateRequest {
     private int driverLicenseId;
 
     public void setDriverLicenseId(Integer o) {
+        if (o == null) {
+            this.driverLicenseId = 0;
+        } else {
+            this.driverLicenseId = o;
+        }
     }
 }

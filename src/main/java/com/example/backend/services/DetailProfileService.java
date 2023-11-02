@@ -69,24 +69,25 @@ public class DetailProfileService {
         Profile profile = profileRepository.findById(detailProfileUpdateRequest.getProfileId())
                 .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getProfileId()));
 
-
         return detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
             update.setDateExamination(detailProfileUpdateRequest.getDateExamination());
             update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
             update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
             update.setProfileId(profile);
-            if(detailProfileUpdateRequest.getDriverLicenseId() == 0 || detailProfileUpdateRequest.getResultPractice() < 50.0 || detailProfileUpdateRequest.getResultTheoretical() < 50.0){
-                update.setDriverLicenseId(detailProfileUpdateRequest.getDriverLicenseId());
-            }else {
+            if (detailProfileUpdateRequest.getDriverLicenseId() == 0 ||
+                    detailProfileUpdateRequest.getResultPractice() < 50.0 ||
+                    detailProfileUpdateRequest.getResultTheoretical() < 50.0) {
+                update.setDriverLicenseId(null);
+            } else {
                 DriverLicense driverLicense = driverLicenseRepository.findById(detailProfileUpdateRequest.getDriverLicenseId())
                         .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getDriverLicenseId()));
-
                 update.setDriverLicenseId(driverLicense);
             }
 
             return detailProfileRepository.save(update);
         });
     }
+
 
     public List<DetailProfileResponse> detailProfileResponseList() {
         return detailProfileRepository.findAll()
