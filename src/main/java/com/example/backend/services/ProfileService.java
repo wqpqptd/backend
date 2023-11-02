@@ -44,11 +44,8 @@ public class ProfileService {
         String filePath = Paths.get(uploadDir, fileName).toString();
         FileUploadUtil.saveFile(uploadDir, fileName, image);
 
-        try {
-            image.transferTo(new File(filePath));
-        } catch (IOException e) {
-        }
-        profileCreateRequest.setImage(filePath);
+        String imageUrl = "http://localhost:8080/image/" + fileName;
+
         Nation nation = nationRepository.findById(profileCreateRequest.getNationId())
                 .orElseThrow(() -> new EntityNotFoundException("profileCreateRequest not found with ID: " + profileCreateRequest.getNationId()));
 
@@ -62,14 +59,13 @@ public class ProfileService {
         System.out.println(religion);
         System.out.println(examinations);
 
-
         Profile profile = new Profile();
         profile.setName(profileCreateRequest.getName());
         profile.setDateofbirth(profileCreateRequest.getDateofbirth());
         profile.setSex(profileCreateRequest.getSex());
         profile.setIdcard(profileCreateRequest.getIdcard());
         profile.setPhone(profileCreateRequest.getPhone());
-        profile.setImage(profileCreateRequest.getImage());
+        profile.setImage(imageUrl);
         profile.setNote(profileCreateRequest.getNote());
         profile.setNation(nation);
         profile.setReligion(religion);
@@ -78,22 +74,23 @@ public class ProfileService {
         profile.setWards(profileCreateRequest.getWards());
         profile.setExaminations(examinations);
 
-
         return profileRepository.save(profile);
     }
 
-    public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest, MultipartFile image, int id) {
 
+    public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest, MultipartFile image, int id) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\intellij\\backend\\uploads";
+        String uploadDir = "D:\\github\\backend\\uploads";
         String filePath = Paths.get(uploadDir, fileName).toString();
         FileUploadUtil.saveFile(uploadDir, fileName, image);
 
+        String imageUrl = "http://localhost:8080/image/" + fileName;
+
         try {
-            image.transferTo(new File(filePath));
+            image.transferTo(new File(imageUrl));
         } catch (IOException e) {
         }
-        profileUpdateRequest.setImage(filePath);
+        profileUpdateRequest.setImage(imageUrl);
         Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
                 .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
 
