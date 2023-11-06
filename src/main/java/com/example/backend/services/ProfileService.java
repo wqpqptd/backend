@@ -46,7 +46,7 @@ public class ProfileService {
 
     public Profile createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\github\\backend\\uploads";
+        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
         String filePath = Paths.get(uploadDir, fileName).toString();
         FileUploadUtil.saveFile(uploadDir, fileName, image);
 
@@ -86,7 +86,7 @@ public class ProfileService {
 
     public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest, MultipartFile image, int id) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\github\\backend\\uploads";
+        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
         String filePath = Paths.get(uploadDir, fileName).toString();
         FileUploadUtil.saveFile(uploadDir, fileName, image);
 
