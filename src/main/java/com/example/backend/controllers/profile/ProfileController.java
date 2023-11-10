@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/profile")
-@CrossOrigin(origins = "http://localhost/3000")
 public class ProfileController {
     @Autowired
     private ProfileService service;
