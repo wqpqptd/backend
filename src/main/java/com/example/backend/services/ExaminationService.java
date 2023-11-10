@@ -22,9 +22,15 @@ public class ExaminationService {
 
     public Optional<Examinations> updateExamination(Examinations examination) {
         return examinationRepository.findById(examination.getId()).map(update -> {
-            update.setExaminationsName(examination.getExaminationsName());
-            update.setExaminationsDate(examination.getExaminationsDate());
-            update.setExaminationsDescription(examination.getExaminationsDescription());
+            if (examination.getExaminationsName() != null) {
+                update.setExaminationsName(examination.getExaminationsName());
+            }
+            if (examination.getExaminationsDate() != null) {
+                update.setExaminationsDate(examination.getExaminationsDate());
+            }
+            if (examination.getExaminationsDescription() != null) {
+                update.setExaminationsDescription(examination.getExaminationsDescription());
+            }
             return examinationRepository.save(update);
         });
     }

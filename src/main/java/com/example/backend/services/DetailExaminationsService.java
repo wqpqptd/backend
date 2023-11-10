@@ -50,8 +50,10 @@ public class DetailExaminationsService {
                 .orElseThrow(() -> new EntityNotFoundException("detailExaminationUpdateRequest not found with ID: " + detailExaminationUpdateRequest.getExaminationsId()));
 
         return detailExaminationsRepository.findById(detailExaminationUpdateRequest.getId()).map(update -> {
-            update.setOfficer(officer);
-            update.setExaminations(examinations);
+            if (detailExaminationUpdateRequest.getOfficerId() != 0)
+                update.setOfficer(officer);
+            if (detailExaminationUpdateRequest.getExaminationsId() != 0)
+                update.setExaminations(examinations);
             return detailExaminationsRepository.save(update);
         });
     }

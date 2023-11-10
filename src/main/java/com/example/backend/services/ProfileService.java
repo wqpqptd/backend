@@ -108,19 +108,32 @@ public class ProfileService {
 
 
         return profileRepository.findById(id).map(profile -> {
-            profile.setName(profileUpdateRequest.getName());
-            profile.setDateofbirth(profileUpdateRequest.getDateofbirth());
-            profile.setSex(profileUpdateRequest.getSex());
-            profile.setIdcard(profileUpdateRequest.getIdcard());
-            profile.setPhone(profileUpdateRequest.getPhone());
-            profile.setImage(profileUpdateRequest.getImage());
-            profile.setNote(profileUpdateRequest.getNote());
-            profile.setNation(nation);
-            profile.setReligion(religion);
-            profile.setProvince(profileUpdateRequest.getProvince());
-            profile.setDistrict(profileUpdateRequest.getDistrict());
-            profile.setWards(profileUpdateRequest.getWards());
-            profile.setExaminations(examinations);
+            if (profileUpdateRequest.getName() != null)
+                profile.setName(profileUpdateRequest.getName());
+            if (profileUpdateRequest.getDateofbirth() != null)
+                profile.setDateofbirth(profileUpdateRequest.getDateofbirth());
+            if (profileUpdateRequest.getSex() != null)
+                profile.setSex(profileUpdateRequest.getSex());
+            if (profileUpdateRequest.getIdcard() != null)
+                profile.setIdcard(profileUpdateRequest.getIdcard());
+            if (profileUpdateRequest.getPhone() != null)
+                profile.setPhone(profileUpdateRequest.getPhone());
+            if (profileUpdateRequest.getImage() != null)
+                profile.setImage(profileUpdateRequest.getImage());
+            if (profileUpdateRequest.getNote() != null)
+                profile.setNote(profileUpdateRequest.getNote());
+            if (profileUpdateRequest.getNationId() != 0)
+                profile.setNation(nation);
+            if (profileUpdateRequest.getReligionId() != 0)
+                profile.setReligion(religion);
+            if (profileUpdateRequest.getProvince() != null)
+                profile.setProvince(profileUpdateRequest.getProvince());
+            if (profileUpdateRequest.getDistrict() != null)
+                profile.setDistrict(profileUpdateRequest.getDistrict());
+            if (profileUpdateRequest.getWards() != null)
+                profile.setWards(profileUpdateRequest.getWards());
+            if (profileUpdateRequest.getExaminationsId() != 0)
+                profile.setExaminations(examinations);
             return profileRepository.save(profile);
         });
     }

@@ -20,8 +20,10 @@ public class NationService {
     }
 
     public Optional<Nation> updateNation(Nation nation, int id) {
+        nation.setId(id);
         return nationRepository.findById(id).map(update -> {
-            update.setNationName(nation.getNationName());
+            if (nation.getNationName() != null)
+                update.setNationName(nation.getNationName());
             return nationRepository.save(update);
         });
     }

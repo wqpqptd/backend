@@ -20,7 +20,8 @@ public class DriverLicenseClassService {
 
     public Optional<DriverLicenseClass> updateDriverLicenseClass(DriverLicenseClass driverLicenseClass) {
         return driverLicenseClassRepository.findById(driverLicenseClass.getId()).map(update -> {
-            update.setDriverLicenseClassName(driverLicenseClass.getDriverLicenseClassName());
+            if (driverLicenseClass.getDriverLicenseClassName() != null)
+                update.setDriverLicenseClassName(driverLicenseClass.getDriverLicenseClassName());
             return driverLicenseClassRepository.save(update);
         });
     }

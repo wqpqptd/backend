@@ -21,7 +21,9 @@ public class ReligionService {
 
     public Optional<Religion> updateReligion(Religion religion) {
         return religionRepository.findById(religion.getId()).map(result -> {
-            result.setReligionName(religion.getReligionName());
+            if (religion.getReligionName() != null) {
+                result.setReligionName(religion.getReligionName());
+            }
             return religionRepository.save(result);
         });
     }

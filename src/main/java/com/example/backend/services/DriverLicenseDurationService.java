@@ -21,7 +21,8 @@ public class DriverLicenseDurationService {
 
     public Optional<DriverLicenseDuration> updateDriverLicenseDuration(DriverLicenseDuration driverLicenseDuration) {
         var result = driverLicenseDurationRepository.findById(driverLicenseDuration.getId()).map(update -> {
-            update.setDuration(driverLicenseDuration.getDuration());
+            if (driverLicenseDuration.getDuration() != null)
+                update.setDuration(driverLicenseDuration.getDuration());
             return driverLicenseDurationRepository.save(update);
         });
         if (result.isEmpty()){

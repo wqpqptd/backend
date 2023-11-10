@@ -69,10 +69,12 @@ public class DetailProfileService {
                 .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getProfileId()));
 
         return detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
-            update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
-            update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
-            update.setProfileId(profile);
-
+            if (detailProfileUpdateRequest.getResultTheoretical() != null)
+                update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
+            if (detailProfileUpdateRequest.getResultPractice() != null)
+                update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
+            if (detailProfileUpdateRequest.getProfileId() != 0)
+                update.setProfileId(profile);
             if (detailProfileUpdateRequest.getDriverLicenseId() == 0 ||
                     detailProfileUpdateRequest.getResultPractice() < 50.0 || detailProfileUpdateRequest.getResultPractice() > 100.0 ||
                     detailProfileUpdateRequest.getResultTheoretical() < 50.0 || detailProfileUpdateRequest.getResultTheoretical() > 100.0) {

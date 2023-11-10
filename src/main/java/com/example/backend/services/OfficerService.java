@@ -22,12 +22,15 @@ public class OfficerService {
     }
 
     public Optional<Officer> updateOfficer(Officer officer, int id) {
+        officer.setId(id);
         return officerRepository.findById(id).map(result -> {
-                result.setId(id);
+            if (officer.getName() != null)
                 result.setName(officer.getName());
+            if (officer.getPhone() != null)
                 result.setPhone(officer.getPhone());
+            if (officer.getEmail() != null)
                 result.setEmail(officer.getEmail());
-                return officerRepository.save(result);
+            return officerRepository.save(result);
             });
     }
 
