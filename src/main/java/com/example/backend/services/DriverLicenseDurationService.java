@@ -4,6 +4,7 @@ import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.DriverLicenseDuration;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.DriverLicenseDurationRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +21,10 @@ public class DriverLicenseDurationService {
     }
 
     public Optional<DriverLicenseDuration> updateDriverLicenseDuration(DriverLicenseDuration driverLicenseDuration) {
-        var result = driverLicenseDurationRepository.findById(driverLicenseDuration.getId()).map(update -> {
-            if (driverLicenseDuration.getDuration() != null)
-                update.setDuration(driverLicenseDuration.getDuration());
+        return driverLicenseDurationRepository.findById(driverLicenseDuration.getId()).map(update -> {
+            NonNullPropertiesUtils.copyNonNullProperties(driverLicenseDuration, update);
             return driverLicenseDurationRepository.save(update);
         });
-        if (result.isEmpty()){
-            throw new IllegalArgumentException(CustomErrorMessage.FAILED_UPDATE);
-        }
-        return result;
     }
 
     public List<DriverLicenseDuration> DriverLicenseDurationList() {

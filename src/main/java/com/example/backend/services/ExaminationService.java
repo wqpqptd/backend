@@ -5,6 +5,7 @@ import com.example.backend.entities.Examinations;
 import com.example.backend.entities.Nation;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.ExaminationRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +23,7 @@ public class ExaminationService {
 
     public Optional<Examinations> updateExamination(Examinations examination) {
         return examinationRepository.findById(examination.getId()).map(update -> {
-            if (examination.getExaminationsName() != null) {
-                update.setExaminationsName(examination.getExaminationsName());
-            }
-            if (examination.getExaminationsDate() != null) {
-                update.setExaminationsDate(examination.getExaminationsDate());
-            }
-            if (examination.getExaminationsDescription() != null) {
-                update.setExaminationsDescription(examination.getExaminationsDescription());
-            }
+            NonNullPropertiesUtils.copyNonNullProperties(examination, update);
             return examinationRepository.save(update);
         });
     }

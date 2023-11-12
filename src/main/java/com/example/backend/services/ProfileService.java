@@ -96,7 +96,6 @@ public class ProfileService {
             image.transferTo(new File(imageUrl));
         } catch (IOException e) {
         }
-        profileUpdateRequest.setImage(imageUrl);
         Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
                 .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
 
@@ -106,6 +105,10 @@ public class ProfileService {
         Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId())
                 .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getExaminationsId()));
 
+        profileUpdateRequest.setNationId(nation.getId());
+        profileUpdateRequest.setReligionId(religion.getId());
+        profileUpdateRequest.setExaminationsId(examinations.getId());
+        profileUpdateRequest.setImage(imageUrl);
 
         return profileRepository.findById(id).map(profile -> {
             if (profileUpdateRequest.getName() != null)

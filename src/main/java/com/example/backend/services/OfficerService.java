@@ -5,6 +5,7 @@ import com.example.backend.entities.Officer;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.exceptions.CustomExceptionHandler;
 import com.example.backend.repositories.OfficerRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,9 @@ public class OfficerService {
 
     }
 
-    public Optional<Officer> updateOfficer(Officer officer, int id) {
-        officer.setId(id);
-        return officerRepository.findById(id).map(result -> {
-            if (officer.getName() != null)
-                result.setName(officer.getName());
-            if (officer.getPhone() != null)
-                result.setPhone(officer.getPhone());
-            if (officer.getEmail() != null)
-                result.setEmail(officer.getEmail());
+    public Optional<Officer> updateOfficer(Officer officer) {
+        return officerRepository.findById(officer.getId()).map(result -> {
+            NonNullPropertiesUtils.copyNonNullProperties(officer, result);
             return officerRepository.save(result);
             });
     }

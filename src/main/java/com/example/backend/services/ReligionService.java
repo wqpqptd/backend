@@ -4,6 +4,7 @@ import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.Religion;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.ReligionRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,7 @@ public class ReligionService {
 
     public Optional<Religion> updateReligion(Religion religion) {
         return religionRepository.findById(religion.getId()).map(result -> {
-            if (religion.getReligionName() != null) {
-                result.setReligionName(religion.getReligionName());
-            }
+            NonNullPropertiesUtils.copyNonNullProperties(religion, result);
             return religionRepository.save(result);
         });
     }

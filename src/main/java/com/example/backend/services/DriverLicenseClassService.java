@@ -4,6 +4,7 @@ import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.DriverLicenseClass;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.DriverLicenseClassRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,7 @@ public class DriverLicenseClassService {
 
     public Optional<DriverLicenseClass> updateDriverLicenseClass(DriverLicenseClass driverLicenseClass) {
         return driverLicenseClassRepository.findById(driverLicenseClass.getId()).map(update -> {
-            if (driverLicenseClass.getDriverLicenseClassName() != null)
-                update.setDriverLicenseClassName(driverLicenseClass.getDriverLicenseClassName());
+            NonNullPropertiesUtils.copyNonNullProperties(driverLicenseClass, update);
             return driverLicenseClassRepository.save(update);
         });
     }

@@ -25,7 +25,8 @@ public class OfficerController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Optional<Officer>> updateOfficer(@RequestBody Officer officer, @PathVariable(name = "id") int id) {
-        return ResponseEntity.ok(officerService.updateOfficer(officer, id));
+        officer.setId(id);
+        return ResponseEntity.ok(officerService.updateOfficer(officer));
     }
 
     @GetMapping()

@@ -24,7 +24,8 @@ public class NationController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Optional<Nation>> updateNation(@RequestBody Nation nation, @PathVariable(name = "id") int id) {
-        return ResponseEntity.ok(nationService.updateNation(nation, id));
+        nation.setId(id);
+        return ResponseEntity.ok(nationService.updateNation(nation));
     }
 
     @GetMapping("/{id}")

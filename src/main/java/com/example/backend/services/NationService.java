@@ -4,6 +4,7 @@ import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.Nation;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.NationRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,9 @@ public class NationService {
         return nationRepository.save(nation);
     }
 
-    public Optional<Nation> updateNation(Nation nation, int id) {
-        nation.setId(id);
-        return nationRepository.findById(id).map(update -> {
-            if (nation.getNationName() != null)
-                update.setNationName(nation.getNationName());
+    public Optional<Nation> updateNation(Nation nation) {
+        return nationRepository.findById(nation.getId()).map(update -> {
+            NonNullPropertiesUtils.copyNonNullProperties(nation, update);
             return nationRepository.save(update);
         });
     }
