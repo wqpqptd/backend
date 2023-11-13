@@ -19,6 +19,10 @@ public class Profile {
     private int id;
 
     @NotNull
+    @JoinColumn(name = "email")
+    private String email;
+
+    @NotNull
     @JoinColumn(name = "name")
     private String name;
 
@@ -41,6 +45,10 @@ public class Profile {
     @NotNull
     @JoinColumn(name = "image")
     private String image;
+
+    @NotNull
+    @JoinColumn(name = "file")
+    private String file;
 
     @NotNull
     @JoinColumn(name = "note")

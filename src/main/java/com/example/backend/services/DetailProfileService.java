@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,6 @@ public class DetailProfileService {
     private DetailExaminationsRepository detailExaminationsRepository;
     @Autowired
     private DriverLicenseRepository driverLicenseRepository;
-
     @Autowired
     private ProfileRepository profileRepository;
 
@@ -66,28 +64,38 @@ public class DetailProfileService {
 
     public Optional<DetailProfile> updateDetailProfile(DetailProfileUpdateRequest detailProfileUpdateRequest) {
         Profile profile = profileRepository.findById(detailProfileUpdateRequest.getProfileId())
-                .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getProfileId()));
-
-        return detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
-            if (detailProfileUpdateRequest.getResultTheoretical() != null)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found with ID: " + detailProfileUpdateRequest.getProfileId()));
+        var result = detailProfileRepository.findById(detailProfileUpdateRequest.getId()).map(update -> {
+            if (detailProfileUpdateRequest.getResultTheoretical() != null) {
                 update.setResultTheoretical(detailProfileUpdateRequest.getResultTheoretical());
-            if (detailProfileUpdateRequest.getResultPractice() != null)
+            }
+            if (detailProfileUpdateRequest.getResultPractice() != null) {
                 update.setResultPractice(detailProfileUpdateRequest.getResultPractice());
-            if (detailProfileUpdateRequest.getProfileId() != 0)
+            }
+            if (detailProfileUpdateRequest.getProfileId() != 0) {
                 update.setProfileId(profile);
-            if (detailProfileUpdateRequest.getDriverLicenseId() == 0 ||
-                    detailProfileUpdateRequest.getResultPractice() < 50.0 || detailProfileUpdateRequest.getResultPractice() > 100.0 ||
-                    detailProfileUpdateRequest.getResultTheoretical() < 50.0 || detailProfileUpdateRequest.getResultTheoretical() > 100.0) {
-                update.setDriverLicenseId(null);
-            } else {
+            }
+            if (detailProfileUpdateRequest.getResultPractice() > 100 || detailProfileUpdateRequest.getResultPractice() < 0) {
+                throw new IllegalArgumentException(CustomErrorMessage.VALUE_UPDATE_ILLEGAL);
+            }
+            if (detailProfileUpdateRequest.getResultTheoretical() > 100 || detailProfileUpdateRequest.getResultTheoretical() < 0) {
+                throw new IllegalArgumentException(CustomErrorMessage.VALUE_UPDATE_ILLEGAL);
+            }
+            if (detailProfileUpdateRequest.getDriverLicenseId() != 0 &&
+                    detailProfileUpdateRequest.getResultPractice() >= 50.0 && detailProfileUpdateRequest.getResultPractice() <= 100.0 &&
+                    detailProfileUpdateRequest.getResultTheoretical() >= 50.0 && detailProfileUpdateRequest.getResultTheoretical() <= 100.0) {
                 DriverLicense driverLicense = driverLicenseRepository.findById(detailProfileUpdateRequest.getDriverLicenseId())
-                        .orElseThrow(() -> new EntityNotFoundException("detailProfileUpdateRequest not found with ID: " + detailProfileUpdateRequest.getDriverLicenseId()));
+                        .orElseThrow(() -> new EntityNotFoundException("DriverLicense not found with ID: " + detailProfileUpdateRequest.getDriverLicenseId()));
                 update.setDriverLicenseId(driverLicense);
+            } else {
+                update.setDriverLicenseId(null);
             }
 
             return detailProfileRepository.save(update);
         });
+        return result;
     }
+
 
 
     public List<DetailProfileResponse> detailProfileResponseList() {
@@ -100,7 +108,7 @@ public class DetailProfileService {
                     response.setResultPractice(tmp.getResultPractice());
                     Profile profile = tmp.getProfileId();
                     if (profile != null) {
-                        response.setId(profile.getId());
+                        response.setEmail(profile.getEmail());
                         response.setName(profile.getName());
                         response.setSex(profile.getSex());
                         response.setIdcard(profile.getIdcard());
@@ -149,7 +157,7 @@ public class DetailProfileService {
                     response.setResultPractice(tmp.getResultPractice());
                     Profile profile = tmp.getProfileId();
                     if (profile != null) {
-                        response.setName(profile.getName());
+                        response.setEmail(profile.getEmail());
                         response.setSex(profile.getSex());
                         response.setIdcard(profile.getIdcard());
                         response.setPhone(profile.getPhone());

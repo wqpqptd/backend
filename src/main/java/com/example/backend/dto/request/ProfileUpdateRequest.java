@@ -10,12 +10,12 @@ import java.time.LocalDate;
 @Data
 public class ProfileUpdateRequest {
     private int id;
+    private String email;
     private String name;
     private LocalDate dateofbirth;
     private String sex;
     private String idcard;
     private String phone;
-    private String image;
     private String note;
     private int nationId;
     private int religionId;

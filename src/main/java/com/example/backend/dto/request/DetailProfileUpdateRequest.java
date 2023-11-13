@@ -9,7 +9,6 @@ import java.util.Objects;
 @Data
 public class DetailProfileUpdateRequest {
     private int id;
-    private LocalDate dateExamination;
     private Double resultTheoretical;
     private Double resultPractice;
     private int profileId;
@@ -21,6 +20,26 @@ public class DetailProfileUpdateRequest {
             this.driverLicenseId = 0;
         } else {
             this.driverLicenseId = o;
+        }
+    }
+
+    public Double getResultTheoretical() {
+        return resultTheoretical;
+    }
+
+    public void setResultTheoretical(Double resultTheoretical) {
+        if (resultTheoretical != null) {
+            this.resultTheoretical = resultTheoretical;
+        }
+    }
+
+    public Double getResultPractice() {
+        return resultPractice;
+    }
+
+    public void setResultPractice(Double resultPractice) {
+        if (resultTheoretical != null) {
+            this.resultPractice = resultPractice;
         }
     }
 }

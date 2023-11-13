@@ -26,6 +26,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -38,19 +40,22 @@ public class ProfileService {
     private NationRepository nationRepository;
     @Autowired
     private ReligionRepository religionRepository;
-
     @Autowired
     private ExaminationRepository examinationRepository;
+    @Autowired
+    private EmailService emailService;
 
 
 
-    public Profile createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image) {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
-        String filePath = Paths.get(uploadDir, fileName).toString();
-        FileUploadUtil.saveFile(uploadDir, fileName, image);
+    public Profile createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image, MultipartFile file) {
+        String imageName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String uploadDir = "D:\\github\\backend\\uploads";
+        FileUploadUtil.saveFile(uploadDir, imageName, image);
+        FileUploadUtil.saveFile(uploadDir, fileName, file);
 
-        String imageUrl = "http://localhost:8080/image/" + fileName;
+        String imageUrl = "http://localhost:8080/image/" + imageName;
+        String fileUrl =  "http://localhost:8080/file/" + fileName;
 
         Nation nation = nationRepository.findById(profileCreateRequest.getNationId())
                 .orElseThrow(() -> new EntityNotFoundException("profileCreateRequest not found with ID: " + profileCreateRequest.getNationId()));
@@ -66,12 +71,14 @@ public class ProfileService {
         System.out.println(examinations);
 
         Profile profile = new Profile();
+        profile.setEmail(profileCreateRequest.getEmail());
         profile.setName(profileCreateRequest.getName());
         profile.setDateofbirth(profileCreateRequest.getDateofbirth());
         profile.setSex(profileCreateRequest.getSex());
         profile.setIdcard(profileCreateRequest.getIdcard());
         profile.setPhone(profileCreateRequest.getPhone());
         profile.setImage(imageUrl);
+        profile.setFile(fileUrl);
         profile.setNote(profileCreateRequest.getNote());
         profile.setNation(nation);
         profile.setReligion(religion);
@@ -79,23 +86,20 @@ public class ProfileService {
         profile.setDistrict(profileCreateRequest.getDistrict());
         profile.setWards(profileCreateRequest.getWards());
         profile.setExaminations(examinations);
-
+        if (examinations.getExaminationsQuantity() == 0) {
+            throw new IllegalArgumentException(CustomErrorMessage.QUANTITY_PROFILE_REGISTER_FULL);
+        } else {
+            int i = examinations.getExaminationsQuantity() - 1;
+            examinations.setExaminationsQuantity(i);
+        }
+        LocalDate date = LocalDate.now();
+        emailService.sendReminderEmailsCreateProfile(profile, date);
+        emailService.sendReminderEmails(profile);
         return profileRepository.save(profile);
     }
 
 
-    public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest, MultipartFile image, int id) {
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
-        String filePath = Paths.get(uploadDir, fileName).toString();
-        FileUploadUtil.saveFile(uploadDir, fileName, image);
-
-        String imageUrl = "http://localhost:8080/image/" + fileName;
-
-        try {
-            image.transferTo(new File(imageUrl));
-        } catch (IOException e) {
-        }
+    public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest) {
         Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
                 .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
 
@@ -108,9 +112,10 @@ public class ProfileService {
         profileUpdateRequest.setNationId(nation.getId());
         profileUpdateRequest.setReligionId(religion.getId());
         profileUpdateRequest.setExaminationsId(examinations.getId());
-        profileUpdateRequest.setImage(imageUrl);
 
-        return profileRepository.findById(id).map(profile -> {
+        return profileRepository.findById(profileUpdateRequest.getId()).map(profile -> {
+            if (profileUpdateRequest.getEmail() != null)
+                profile.setEmail(profileUpdateRequest.getEmail());
             if (profileUpdateRequest.getName() != null)
                 profile.setName(profileUpdateRequest.getName());
             if (profileUpdateRequest.getDateofbirth() != null)
@@ -121,8 +126,6 @@ public class ProfileService {
                 profile.setIdcard(profileUpdateRequest.getIdcard());
             if (profileUpdateRequest.getPhone() != null)
                 profile.setPhone(profileUpdateRequest.getPhone());
-            if (profileUpdateRequest.getImage() != null)
-                profile.setImage(profileUpdateRequest.getImage());
             if (profileUpdateRequest.getNote() != null)
                 profile.setNote(profileUpdateRequest.getNote());
             if (profileUpdateRequest.getNationId() != 0)
@@ -157,9 +160,12 @@ public class ProfileService {
         ResponseMessage message = new ResponseMessage();
         var isResult = profileRepository.findById(id);
         try {
-            String fileName = isResult.get().getImage().substring(isResult.get().getImage().lastIndexOf('/') + 1);
-            Path imagePath = Paths.get("uploads", fileName);
+            String imageName = isResult.get().getImage().substring(isResult.get().getImage().lastIndexOf('/') + 1);
+            Path imagePath = Paths.get("uploads", imageName);
+            String fileName = isResult.get().getFile().substring(isResult.get().getFile().lastIndexOf('/') + 1);
+            Path filePath = Paths.get("uploads", fileName);
             Files.deleteIfExists(imagePath);
+            Files.deleteIfExists(filePath);
             profileRepository.deleteById(id);
             message.setMessage("delete religion by id successfully!");
         } catch (IOException e) {

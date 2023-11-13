@@ -22,12 +22,14 @@ public class ProfileController {
     private ProfileService service;
 
     @PostMapping("")
-    public ResponseEntity<Profile> createProfile(@RequestParam("name") String name,
-                                        @RequestParam("dateofbirth")LocalDate dateofbirth,
+    public ResponseEntity<Profile> createProfile(@RequestParam("email") String email,
+                                        @RequestParam("name") String name,
+                                        @RequestParam("dateofbirth") LocalDate dateofbirth,
                                         @RequestParam("sex") String sex,
                                         @RequestParam("idcard") String idcard,
                                         @RequestParam("phone") String phone,
                                         @RequestParam("image") MultipartFile image,
+                                        @RequestParam("file") MultipartFile file,
                                         @RequestParam("note") String note,
                                         @RequestParam("nation_id") String nation_id,
                                         @RequestParam("religion_id") String religion_id,
@@ -37,6 +39,7 @@ public class ProfileController {
                                         @RequestParam("examinations_id") String examinations_id ) {
 
         ProfileCreateRequest profileCreateRequest = new ProfileCreateRequest();
+        profileCreateRequest.setEmail(email);
         profileCreateRequest.setName(name);
         profileCreateRequest.setDateofbirth(dateofbirth);
         profileCreateRequest.setSex(sex);
@@ -49,41 +52,14 @@ public class ProfileController {
         profileCreateRequest.setDistrict(district);
         profileCreateRequest.setWards(wards);
         profileCreateRequest.setExaminationsId(Integer.parseInt(examinations_id));
-            return new ResponseEntity<>(service.createProfile(profileCreateRequest, image), HttpStatus.CREATED);
+            return new ResponseEntity<>(service.createProfile(profileCreateRequest, image, file), HttpStatus.CREATED);
 
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Optional<Profile>> updateProfile(@PathVariable(value = "id") int id,
-                                                           @RequestParam("name") String name,
-                                                           @RequestParam("dateofbirth")LocalDate dateofbirth,
-                                                           @RequestParam("sex") String sex,
-                                                           @RequestParam("idcard") String idcard,
-                                                           @RequestParam("phone") String phone,
-                                                           @RequestParam("image") MultipartFile image,
-                                                           @RequestParam("note") String note,
-                                                           @RequestParam("nation_id") String nation_id,
-                                                           @RequestParam("religion_id") String religion_id,
-                                                           @RequestParam("province") String province,
-                                                           @RequestParam("district") String district,
-                                                           @RequestParam("wards") String wards,
-                                                           @RequestParam("examinations_id") String examinations_id ) {
-
-
-        ProfileUpdateRequest profileUpdateRequest = new ProfileUpdateRequest();
-        profileUpdateRequest.setName(name);
-        profileUpdateRequest.setDateofbirth(dateofbirth);
-        profileUpdateRequest.setSex(sex);
-        profileUpdateRequest.setIdcard(idcard);
-        profileUpdateRequest.setPhone(phone);
-        profileUpdateRequest.setNote(note);
-        profileUpdateRequest.setNationId(Integer.parseInt(nation_id));
-        profileUpdateRequest.setReligionId(Integer.parseInt(religion_id));
-        profileUpdateRequest.setProvince(province);
-        profileUpdateRequest.setDistrict(district);
-        profileUpdateRequest.setWards(wards);
-        profileUpdateRequest.setExaminationsId(Integer.parseInt(examinations_id));
-        return ResponseEntity.ok(service.updateProfile(profileUpdateRequest, image, id));
+    public ResponseEntity<Optional<Profile>> updateProfile(@PathVariable(value = "id") int id, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+        profileUpdateRequest.setId(id);
+        return ResponseEntity.ok(service.updateProfile(profileUpdateRequest));
     }
 
     @GetMapping()

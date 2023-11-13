@@ -26,10 +26,14 @@ public class Examinations {
     @NotNull
     @Column(name = "examinations_description")
     private String examinationsDescription;
+    @NotNull
+    @Column(name = "examinations_quantity")
+    private int examinationsQuantity;
 
-    public Examinations(String examinationsName, LocalDate examinationsDate, String examinationsDescription) {
+    public Examinations(String examinationsName, LocalDate examinationsDate, String examinationsDescription, int examinationsQuantity) {
         this.examinationsName = examinationsName;
         this.examinationsDate = examinationsDate;
         this.examinationsDescription = examinationsDescription;
+        this.examinationsQuantity = examinationsQuantity;
     }
 }
