@@ -2,16 +2,12 @@ package com.example.backend.services;
 
 import com.example.backend.entities.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class IEmailService implements EmailService {

@@ -2,7 +2,6 @@ package com.example.backend.services;
 
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.Examinations;
-import com.example.backend.entities.Nation;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.ExaminationRepository;
 import com.example.backend.utils.NonNullPropertiesUtils;
