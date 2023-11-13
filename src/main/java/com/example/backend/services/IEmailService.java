@@ -60,7 +60,7 @@ public class IEmailService implements EmailService {
 
         sendEmail(profile.getEmail(), subject, text);
     }
-    @Scheduled(cron = "0 52 17 * * ?")
+
     public void sendReminderEmails(Profile profile) {
         LocalDate reminderDate = profile.getExaminationsId().getExaminationsDate().minusDays(1);
 
