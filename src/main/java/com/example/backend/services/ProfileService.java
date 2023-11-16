@@ -2,14 +2,17 @@ package com.example.backend.services;
 
 import com.example.backend.config.FileUploadUtil;
 import com.example.backend.dto.request.ProfileCreateRequest;
+import com.example.backend.dto.request.ProfileStatusUpdateRequest;
 import com.example.backend.dto.request.ProfileUpdateRequest;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.*;
+import com.example.backend.enums.ProfileStatus;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.ExaminationRepository;
 import com.example.backend.repositories.NationRepository;
 import com.example.backend.repositories.ProfileRepository;
 import com.example.backend.repositories.ReligionRepository;
+import com.example.backend.utils.NonNullPropertiesUtils;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileItemFactory;
@@ -50,7 +53,7 @@ public class ProfileService {
     public Profile createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image, MultipartFile file) {
         String imageName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String uploadDir = "D:\\github\\backend\\uploads";
+        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
         FileUploadUtil.saveFile(uploadDir, imageName, image);
         FileUploadUtil.saveFile(uploadDir, fileName, file);
 
@@ -100,20 +103,25 @@ public class ProfileService {
 
 
     public Optional<Profile> updateProfile(ProfileUpdateRequest profileUpdateRequest) {
-        Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
-                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
+        var retrievedProfile = profileRepository.findById(Integer.valueOf(profileUpdateRequest.getId()));
+        if(Objects.isNull(retrievedProfile)) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
+        }
+        System.out.println(profileUpdateRequest);
+//        Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
+//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
+//
+//        Religion religion = religionRepository.findById(profileUpdateRequest.getReligionId())
+//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getReligionId()));
+//
+//        Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId())
+//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getExaminationsId()));
+//
+        Nation nation = nationRepository.findById(profileUpdateRequest.getNationId()).orElse(null);
+        Religion religion = religionRepository.findById(profileUpdateRequest.getReligionId()).orElse(null);
+        Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId()).orElse(null);
 
-        Religion religion = religionRepository.findById(profileUpdateRequest.getReligionId())
-                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getReligionId()));
-
-        Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId())
-                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getExaminationsId()));
-
-        profileUpdateRequest.setNationId(nation.getId());
-        profileUpdateRequest.setReligionId(religion.getId());
-        profileUpdateRequest.setExaminationsId(examinations.getId());
-
-        return profileRepository.findById(profileUpdateRequest.getId()).map(profile -> {
+        return profileRepository.findById(Integer.valueOf(profileUpdateRequest.getId())).map(profile -> {
             if (profileUpdateRequest.getEmail() != null)
                 profile.setEmail(profileUpdateRequest.getEmail());
             if (profileUpdateRequest.getName() != null)
@@ -140,8 +148,20 @@ public class ProfileService {
                 profile.setWards(profileUpdateRequest.getWards());
             if (profileUpdateRequest.getExaminationsId() != 0)
                 profile.setExaminations(examinations);
+            if (profileUpdateRequest.getProfileStatus() != null)
+                profile.setProfileStatus(ProfileStatus.valueOf(profileUpdateRequest.getProfileStatus()));
             return profileRepository.save(profile);
         });
+    }
+
+    public void updateStatus(int id, String profileStatus) {
+        var retrievedProfile = profileRepository.findById(id).get();
+        if(Objects.isNull(retrievedProfile)) {
+            throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
+        }
+        System.out.println(retrievedProfile);
+        retrievedProfile.setProfileStatus(ProfileStatus.valueOf(profileStatus));
+        profileRepository.save(retrievedProfile);
     }
 
     public List<Profile> listProfile() {

@@ -1,9 +1,11 @@
 package com.example.backend.controllers.profile;
 
 import com.example.backend.dto.request.ProfileCreateRequest;
+import com.example.backend.dto.request.ProfileStatusUpdateRequest;
 import com.example.backend.dto.request.ProfileUpdateRequest;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.Profile;
+import com.example.backend.enums.ProfileStatus;
 import com.example.backend.services.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,9 +59,17 @@ public class ProfileController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Optional<Profile>> updateProfile(@PathVariable(value = "id") int id, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+    public ResponseEntity<Optional<Profile>> updateProfile(@PathVariable(value = "id") String id, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
         profileUpdateRequest.setId(id);
+        System.out.println(profileUpdateRequest.getId());
         return ResponseEntity.ok(service.updateProfile(profileUpdateRequest));
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(@PathVariable(value = "id") int id, @RequestBody ProfileStatusUpdateRequest profileStatusUpdateRequest) {
+        String profileStatus = profileStatusUpdateRequest.getProfileStatus();
+        service.updateStatus(id, profileStatus);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping()

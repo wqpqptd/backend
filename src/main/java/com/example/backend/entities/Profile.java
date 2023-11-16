@@ -1,5 +1,6 @@
 package com.example.backend.entities;
 
+import com.example.backend.enums.ProfileStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -80,6 +81,10 @@ public class Profile {
     @JoinColumn(name = "examinations_id")
     private Examinations examinationsId; // Many-to-One relationship with Examinations entity
 
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name="status")
+    private ProfileStatus status = ProfileStatus.NOT_YET_APPROVE;
+
     public void setNation(Nation nation) {
         this.nationId=nation;
     }
@@ -91,4 +96,9 @@ public class Profile {
     public void setExaminations(Examinations examinations) {
         this.examinationsId=examinations;
     }
+
+    public void setProfileStatus(ProfileStatus profileStatus) {
+        status = profileStatus;
+    }
+
 }

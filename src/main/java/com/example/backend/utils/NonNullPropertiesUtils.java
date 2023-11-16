@@ -14,7 +14,7 @@ public class NonNullPropertiesUtils {
                 requestField.setAccessible(true);
                 Object requestValue = requestField.get(request);
 
-                if (requestValue != null) {
+                if (requestValue != null && requestValue != "") {
                     Field responseField = responseClass.getDeclaredField(requestField.getName());
                     responseField.setAccessible(true);
                     responseField.set(response, requestValue);
