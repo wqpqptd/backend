@@ -25,13 +25,18 @@ public class DetailProfile {
     @JoinColumn(name = "result_practice")
     private Double resultPractice;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id")
     private Profile profileId;
+
     @NotNull
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "driver_license_id")
     private DriverLicense driverLicenseId;
+
+
+    @Column(name= "result")
+    private String result;
 
 
 

@@ -49,8 +49,16 @@ public class DetailProfileService {
             detailProfile.setResultTheoretical(detailProfileCreateRequest.getResultTheoretical());
             detailProfile.setResultPractice(detailProfileCreateRequest.getResultPractice());
             detailProfile.setProfile(profile);
-            if (detailProfileCreateRequest.getDriverLicenseId() == 0 || detailProfileCreateRequest.getResultTheoretical() < 50.0 || detailProfileCreateRequest.getResultPractice() < 50.0){
-                detailProfile.setDriverLicenseId(detailProfileCreateRequest.getDriverLicenseId());
+
+            if (detailProfile.getResultTheoretical() >= 21 ) {
+                if (detailProfile.getResultPractice() >= 80) {
+                    detailProfile.setResult("PASS");
+                }
+            }
+            else detailProfile.setResult("FAILED");
+
+            if (detailProfile.getResult().equals("FAILED")){
+                detailProfile.setDriverLicenseId(0);
             }else {
                 DriverLicense driverLicense = driverLicenseRepository.findById(detailProfileCreateRequest.getDriverLicenseId())
                         .orElseThrow(() -> new EntityNotFoundException("detailProfileCreateRequest driverLicense not found with ID: " + detailProfileCreateRequest.getDriverLicenseId()));
@@ -81,13 +89,19 @@ public class DetailProfileService {
             if (detailProfileUpdateRequest.getResultTheoretical() > 100 || detailProfileUpdateRequest.getResultTheoretical() < 0) {
                 throw new IllegalArgumentException(CustomErrorMessage.VALUE_UPDATE_ILLEGAL);
             }
+
+            if (detailProfileUpdateRequest.getResultPractice() >= 80 && detailProfileUpdateRequest.getResultPractice() <= 100.0 &&
+                    detailProfileUpdateRequest.getResultTheoretical() >= 21 && detailProfileUpdateRequest.getResultTheoretical() <= 25) {
+                update.setResult("PASS");
+            } else update.setResult("FAILED");
             if (detailProfileUpdateRequest.getDriverLicenseId() != 0 &&
-                    detailProfileUpdateRequest.getResultPractice() >= 50.0 && detailProfileUpdateRequest.getResultPractice() <= 100.0 &&
-                    detailProfileUpdateRequest.getResultTheoretical() >= 50.0 && detailProfileUpdateRequest.getResultTheoretical() <= 100.0) {
+                    detailProfileUpdateRequest.getResultPractice() >= 80 && detailProfileUpdateRequest.getResultPractice() <= 100.0 &&
+                    detailProfileUpdateRequest.getResultTheoretical() >= 21 && detailProfileUpdateRequest.getResultTheoretical() <= 25) {
                 DriverLicense driverLicense = driverLicenseRepository.findById(detailProfileUpdateRequest.getDriverLicenseId())
                         .orElseThrow(() -> new EntityNotFoundException("DriverLicense not found with ID: " + detailProfileUpdateRequest.getDriverLicenseId()));
                 update.setDriverLicenseId(driverLicense);
-            } else {
+            }
+            else {
                 update.setDriverLicenseId(null);
             }
 
@@ -106,6 +120,7 @@ public class DetailProfileService {
                     response.setId(tmp.getId());
                     response.setResultTheoretical(tmp.getResultTheoretical());
                     response.setResultPractice(tmp.getResultPractice());
+                    response.setResult(tmp.getResult());
                     Profile profile = tmp.getProfileId();
                     if (profile != null) {
                         response.setEmail(profile.getEmail());
@@ -115,6 +130,7 @@ public class DetailProfileService {
                         response.setPhone(profile.getPhone());
                         response.setImage(profile.getImage());
                         response.setNote(profile.getNote());
+                        response.setProfileId(profile.getId());
                         Nation nation = tmp.getProfileId().getNationId();
                         if (nation != null) {
                             response.setNationName(nation.getNationName());
@@ -155,14 +171,17 @@ public class DetailProfileService {
                     response.setId(tmp.getId());
                     response.setResultTheoretical(tmp.getResultTheoretical());
                     response.setResultPractice(tmp.getResultPractice());
+                    response.setResult(tmp.getResult());
                     Profile profile = tmp.getProfileId();
                     if (profile != null) {
                         response.setEmail(profile.getEmail());
+                        response.setName(profile.getName());
                         response.setSex(profile.getSex());
                         response.setIdcard(profile.getIdcard());
                         response.setPhone(profile.getPhone());
                         response.setImage(profile.getImage());
                         response.setNote(profile.getNote());
+                        response.setProfileId(profile.getId());
                         Nation nation = tmp.getProfileId().getNationId();
                         if (nation != null) {
                             response.setNationName(nation.getNationName());
@@ -210,4 +229,6 @@ public class DetailProfileService {
         }
         return message;
     }
+
+
 }

@@ -31,11 +31,14 @@ public class DetailProfileResponse {
     private String province;
     private String district;
     private String wards;
-    @Nullable
+    private int profileId;
+
     private String examinationsName;
 //    private String examinationsOfficer;
-    @Nullable
+
     private String driverLicenseClass;
-    @Nullable
+
     private String driverLicenseDuration;
+
+    private String result;
 }

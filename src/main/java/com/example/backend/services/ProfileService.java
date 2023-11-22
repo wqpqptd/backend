@@ -8,10 +8,7 @@ import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.*;
 import com.example.backend.enums.ProfileStatus;
 import com.example.backend.exceptions.CustomErrorMessage;
-import com.example.backend.repositories.ExaminationRepository;
-import com.example.backend.repositories.NationRepository;
-import com.example.backend.repositories.ProfileRepository;
-import com.example.backend.repositories.ReligionRepository;
+import com.example.backend.repositories.*;
 import com.example.backend.utils.NonNullPropertiesUtils;
 import jakarta.annotation.Resource;
 import jakarta.persistence.EntityNotFoundException;
@@ -45,6 +42,9 @@ public class ProfileService {
     private ReligionRepository religionRepository;
     @Autowired
     private ExaminationRepository examinationRepository;
+
+    @Autowired
+    private DetailProfileRepository detailProfileRepository;
     @Autowired
     private EmailService emailService;
 
@@ -193,5 +193,21 @@ public class ProfileService {
             message.setMessage("delete religion by id failed!");
         }
         return message;
+    }
+
+    public List<Profile> listProfileByIdCard(String idCard) {
+        return profileRepository.findAllByidcard(idCard);
+    }
+
+    public List<Profile> listProfileReversed() {
+        List<Profile> profileList = new ArrayList<>();
+        List<DetailProfile> detailProfileList = detailProfileRepository.findAll();
+
+        for(DetailProfile detailProfile : detailProfileList) {
+            if(detailProfile.getResult().equals("FAILED")) {
+                profileList.add(detailProfile.getProfileId());
+            }
+        }
+        return profileList;
     }
 }

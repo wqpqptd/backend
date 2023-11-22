@@ -24,13 +24,13 @@ public class FileController {
     private UploadService uploadService;
 
     @GetMapping("/{fileName:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws IOException {
         Path filePath = Paths.get("uploads", fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
         if (resource.exists() && resource.isReadable()) {
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.IMAGE_JPEG);
+            headers.setContentType(MediaType.APPLICATION_PDF);
 
             return ResponseEntity.ok()
                     .headers(headers)
@@ -42,7 +42,7 @@ public class FileController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Optional<ResponseMessage>> updateImage(@PathVariable(name = "id") int id,
+    public ResponseEntity<Optional<ResponseMessage>> updateFile(@PathVariable(name = "id") int id,
                                                 @RequestParam("file") MultipartFile file) {
         return new ResponseEntity<>(uploadService.updateFile(id, file), HttpStatus.OK);
     }

@@ -20,7 +20,7 @@ public class UploadService {
 
     public Optional<ResponseMessage> updateImage(int id, MultipartFile image) {
         String imageName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
-        String uploadDir = "D:\\github\\backend\\uploads";
+        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
         String filePath = Paths.get(uploadDir, imageName).toString();
         FileUploadUtil.saveFile(uploadDir, imageName, image);
 
@@ -43,7 +43,7 @@ public class UploadService {
 
     public Optional<ResponseMessage> updateFile(int id, MultipartFile file) {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        String uploadDir = "D:\\github\\backend\\uploads";
+        String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
         FileUploadUtil.saveFile(uploadDir, fileName, file);
 
         String fileUrl = "http://localhost:8080/file/" + fileName;
@@ -54,7 +54,7 @@ public class UploadService {
             updateFileProfile = profileRepository.findById(id).map(update -> {
                 update.setFile(fileUrl);
                 profileRepository.save(update);
-                message.setMessage("Update image profile successfully");
+                message.setMessage("Update file profile successfully");
                 return message;
             });
         } catch (Exception e) {

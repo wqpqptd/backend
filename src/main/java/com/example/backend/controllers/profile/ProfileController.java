@@ -87,4 +87,13 @@ public class ProfileController {
         return ResponseEntity.ok(service.deleteProfileById(id));
     }
 
+    @GetMapping("/idCard/{idCard}")
+    public ResponseEntity<List<Profile>> getAllProfileByIdCard(@PathVariable(value = "idCard") String idCard) {
+        return ResponseEntity.ok(service.listProfileByIdCard(idCard));
+    }
+
+    @GetMapping("/reverse")
+    public ResponseEntity<List<Profile>> getAllProfileReversed() {
+        return ResponseEntity.ok(service.listProfileReversed());
+    }
 }

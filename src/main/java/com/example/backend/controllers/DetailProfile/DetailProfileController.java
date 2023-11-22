@@ -5,6 +5,7 @@ import com.example.backend.dto.request.DetailProfileUpdateRequest;
 import com.example.backend.dto.response.DetailProfileResponse;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.DetailProfile;
+import com.example.backend.entities.Profile;
 import com.example.backend.services.DetailProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,4 +47,5 @@ public class DetailProfileController {
     public ResponseEntity<ResponseMessage> deleteDetailProfile(@PathVariable(name = "id") int id) {
         return ResponseEntity.ok(detailProfileService.deleteDetailProfileById(id));
     }
+
 }

@@ -15,6 +15,8 @@ public class DetailProfileUpdateRequest {
     @Nullable
     private int driverLicenseId;
 
+    private String result;
+
     public void setDriverLicenseId(Integer o) {
         if (o == null) {
             this.driverLicenseId = 0;

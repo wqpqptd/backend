@@ -14,6 +14,7 @@ public class DetailProfileCreateRequest {
     private Double resultTheoretical;
     private Double resultPractice;
     private int profileId;
+
     @Nullable
     private int driverLicenseId;
 
