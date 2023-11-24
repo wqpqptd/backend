@@ -198,6 +198,9 @@ public class ProfileService {
     public List<Profile> listProfileByIdCard(String idCard) {
         return profileRepository.findAllByidcard(idCard);
     }
+    public List<Profile> listProfileByName(String name) {
+        return profileRepository.findAllByName(name);
+    }
 
     public List<Profile> listProfileReversed() {
         List<Profile> profileList = new ArrayList<>();
