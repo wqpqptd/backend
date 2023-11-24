@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +51,7 @@ public class ProfileService {
 
 
 
-    public Profile createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image, MultipartFile file) {
+    public ResponseMessage createProfile(ProfileCreateRequest profileCreateRequest, MultipartFile image, MultipartFile file) {
         String imageName = StringUtils.cleanPath(Objects.requireNonNull(image.getOriginalFilename()));
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String uploadDir = "D:\\TuongDi\\LVTN\\Code\\backend\\uploads";
@@ -96,9 +97,19 @@ public class ProfileService {
             examinations.setExaminationsQuantity(i);
         }
         LocalDate date = LocalDate.now();
-        emailService.sendReminderEmailsCreateProfile(profile, date);
-        emailService.sendReminderEmails(profile);
-        return profileRepository.save(profile);
+        Period period = Period.between(profile.getDateofbirth(), date);
+        int age = period.getYears();
+        ResponseMessage message = new ResponseMessage();
+        if (age >= 18) {
+            emailService.sendReminderEmailsCreateProfile(profile, date);
+            emailService.sendReminderEmails(profile);
+            profileRepository.save(profile);
+            message.setMessage("Register profile successfully!");
+        } else {
+            emailService.sendReminderEmailsNotCreateProfile(profile, date);
+            message.setMessage("Can't register profile!");
+        }
+        return message;
     }
 
 

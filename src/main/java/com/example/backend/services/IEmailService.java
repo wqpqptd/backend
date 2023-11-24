@@ -76,6 +76,16 @@ public class IEmailService implements EmailService {
         }
     }
 
+    @Override
+    public void sendReminderEmailsNotCreateProfile(Profile profile, LocalDate eventDate) {
+        String subject = "Notification: Your can't register exam driver license success";
+        String text = String.format(
+                "You can't register exam driver license because you is not enough 18 year old.%n <br/>"
+        );
+
+        sendEmail(profile.getEmail(), subject, text);
+    }
+
     private boolean isTodayOneDayBefore(LocalDate reminderDate) {
         return LocalDate.now().isEqual(reminderDate);
     }

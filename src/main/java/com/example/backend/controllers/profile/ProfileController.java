@@ -24,7 +24,7 @@ public class ProfileController {
     private ProfileService service;
 
     @PostMapping("")
-    public ResponseEntity<Profile> createProfile(@RequestParam("email") String email,
+    public ResponseEntity<ResponseMessage> createProfile(@RequestParam("email") String email,
                                         @RequestParam("name") String name,
                                         @RequestParam("dateofbirth") LocalDate dateofbirth,
                                         @RequestParam("sex") String sex,
