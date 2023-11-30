@@ -91,7 +91,6 @@ public class ProfileService {
         profile.setDistrict(profileCreateRequest.getDistrict());
         profile.setWards(profileCreateRequest.getWards());
         profile.setExaminations(examinations);
-        profile.setType(ProfileType.NEW_PROFILE);
         if (examinations.getExaminationsQuantity() == 0) {
             throw new IllegalArgumentException(CustomErrorMessage.QUANTITY_PROFILE_REGISTER_FULL);
         } else {
@@ -177,6 +176,12 @@ public class ProfileService {
         }
         System.out.println(retrievedProfile);
         retrievedProfile.setProfileStatus(ProfileStatus.valueOf(profileStatus));
+        LocalDate date = LocalDate.now();
+        if(profileStatus.equals(ProfileStatus.NOT_APPROVE.name())) {
+            emailService.sendReminderEmailsNotApprove(retrievedProfile.getEmail(), date);
+        } else if (profileStatus.equals(ProfileStatus.APPROVED.name())) {
+            emailService.sendReminderEmailsApprove(retrievedProfile.getEmail(), date);
+        }
         profileRepository.save(retrievedProfile);
     }
 

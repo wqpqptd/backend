@@ -19,7 +19,7 @@ public class IEmailService implements EmailService {
     public void sendReminderEmailsCreateProfile(Profile profile, LocalDate date) {
         String subject = "Notification: Your register exam driver license success";
         String text = String.format(
-                "You can follow the website to know information about the examination.%n <br/>" +
+                "You have successfully registered, please wait for us to approve your profile.%n <br/>" +
                         "email: %s%n <br/>" +
                         "name: %s%n <br/>" +
                         "dateofbirth: %s%n <br/>" +
@@ -92,6 +92,22 @@ public class IEmailService implements EmailService {
         String text = "You can follow the website to know information about the examination.";
 
         sendEmail(item.getEmail(), subject, text);
+    }
+
+    @Override
+    public void sendReminderEmailsNotApprove(String email, LocalDate evenDate) {
+        String subject = "Notification: Your profile has not been approved!";
+        String text = "We are sorry that you do not meet the conditions for approval!";
+
+        sendEmail(email, subject, text);
+    }
+
+    @Override
+    public void sendReminderEmailsApprove(String email, LocalDate evenDate) {
+        String subject = "Notification: Your profile has been approved!";
+        String text = "You can follow the website to know information about the examination.";
+
+        sendEmail(email, subject, text);
     }
 
     private boolean isTodayOneDayBefore(LocalDate reminderDate) {
