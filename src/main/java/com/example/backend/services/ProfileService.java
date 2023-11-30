@@ -110,15 +110,17 @@ public class ProfileService {
                 profileRepository.save(item);
                 emailService.sendReminderEmailsReverseProfile(item, date);
                 message.setMessage("Reverse profile");
-            } else if (age >= 18 && !(item.getIdcard().equals(profile.getIdcard())) ) {
-                emailService.sendReminderEmailsCreateProfile(profile, date);
-                emailService.sendReminderEmails(profile);
-                profileRepository.save(profile);
-                message.setMessage("Register profile successfully!");
-            } else {
-                emailService.sendReminderEmailsNotCreateProfile(profile, date);
-                message.setMessage("Can't register profile!");
+                return message;
             }
+        }
+        if (age >= 18) {
+            emailService.sendReminderEmailsCreateProfile(profile, date);
+            emailService.sendReminderEmails(profile);
+            profileRepository.save(profile);
+            message.setMessage("Register profile successfully!");
+        } else {
+            emailService.sendReminderEmailsNotCreateProfile(profile, date);
+            message.setMessage("Can't register profile!");
         }
 
         return message;
