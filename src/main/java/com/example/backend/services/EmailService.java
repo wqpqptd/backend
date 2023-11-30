@@ -10,4 +10,5 @@ public interface EmailService {
     void sendReminderEmailsCreateProfile(Profile profile, LocalDate eventDate);
     void sendReminderEmails(Profile profile);
     void sendReminderEmailsNotCreateProfile(Profile profile, LocalDate eventDate);
+    void sendReminderEmailsReverseProfile(Profile item, LocalDate eventDate);
 }

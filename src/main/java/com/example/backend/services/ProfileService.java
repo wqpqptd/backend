@@ -91,6 +91,7 @@ public class ProfileService {
         profile.setDistrict(profileCreateRequest.getDistrict());
         profile.setWards(profileCreateRequest.getWards());
         profile.setExaminations(examinations);
+        profile.setType(ProfileType.NEW_PROFILE);
         if (examinations.getExaminationsQuantity() == 0) {
             throw new IllegalArgumentException(CustomErrorMessage.QUANTITY_PROFILE_REGISTER_FULL);
         } else {
@@ -104,17 +105,22 @@ public class ProfileService {
 
         for(Profile item : this.listProfile()) {
             System.out.println("profile:" + item.getIdcard());
-            if (item.getIdcard() == profile.getIdcard()) {
+            if (item.getIdcard().equals(profile.getIdcard())) {
                 item.setType(ProfileType.REVERSE_PROFILE);
-            } else if (age >= 18) {
-                emailService.sendReminderEmailsCreateProfile(profile, date);
-                emailService.sendReminderEmails(profile);
-                profileRepository.save(profile);
-                message.setMessage("Register profile successfully!");
-            } else {
-                emailService.sendReminderEmailsNotCreateProfile(profile, date);
-                message.setMessage("Can't register profile!");
+                profileRepository.save(item);
+                emailService.sendReminderEmailsReverseProfile(item, date);
+                message.setMessage("Reverse profile");
+                return message;
             }
+        }
+        if (age >= 18) {
+            emailService.sendReminderEmailsCreateProfile(profile, date);
+            emailService.sendReminderEmails(profile);
+            profileRepository.save(profile);
+            message.setMessage("Register profile successfully!");
+        } else {
+            emailService.sendReminderEmailsNotCreateProfile(profile, date);
+            message.setMessage("Can't register profile!");
         }
 
         return message;
@@ -127,15 +133,6 @@ public class ProfileService {
             throw new IllegalArgumentException(CustomErrorMessage.NOT_FOUND_BY_ID);
         }
         System.out.println(profileUpdateRequest);
-//        Nation nation = nationRepository.findById(profileUpdateRequest.getNationId())
-//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getNationId()));
-//
-//        Religion religion = religionRepository.findById(profileUpdateRequest.getReligionId())
-//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getReligionId()));
-//
-//        Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId())
-//                .orElseThrow(() -> new EntityNotFoundException("profileUpdateRequest not found with ID: " + profileUpdateRequest.getExaminationsId()));
-//
         Nation nation = nationRepository.findById(profileUpdateRequest.getNationId()).orElse(null);
         Religion religion = religionRepository.findById(profileUpdateRequest.getReligionId()).orElse(null);
         Examinations examinations = examinationRepository.findById(profileUpdateRequest.getExaminationsId()).orElse(null);
