@@ -1,6 +1,7 @@
 package com.example.backend.entities;
 
 import com.example.backend.enums.ProfileStatus;
+import com.example.backend.enums.ProfileType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -84,6 +85,10 @@ public class Profile {
     @Enumerated(EnumType.ORDINAL)
     @Column(name="status")
     private ProfileStatus status = ProfileStatus.NOT_YET_APPROVE;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name="type")
+    private ProfileType type = ProfileType.NEW_PROFILE;
 
     public void setNation(Nation nation) {
         this.nationId=nation;

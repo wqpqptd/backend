@@ -7,6 +7,7 @@ import com.example.backend.dto.request.ProfileUpdateRequest;
 import com.example.backend.dto.response.ResponseMessage;
 import com.example.backend.entities.*;
 import com.example.backend.enums.ProfileStatus;
+import com.example.backend.enums.ProfileType;
 import com.example.backend.exceptions.CustomErrorMessage;
 import com.example.backend.repositories.*;
 import com.example.backend.utils.NonNullPropertiesUtils;
@@ -100,15 +101,22 @@ public class ProfileService {
         Period period = Period.between(profile.getDateofbirth(), date);
         int age = period.getYears();
         ResponseMessage message = new ResponseMessage();
-        if (age >= 18) {
-            emailService.sendReminderEmailsCreateProfile(profile, date);
-            emailService.sendReminderEmails(profile);
-            profileRepository.save(profile);
-            message.setMessage("Register profile successfully!");
-        } else {
-            emailService.sendReminderEmailsNotCreateProfile(profile, date);
-            message.setMessage("Can't register profile!");
+
+        for(Profile item : this.listProfile()) {
+            System.out.println("profile:" + item.getIdcard());
+            if (item.getIdcard() == profile.getIdcard()) {
+                item.setType(ProfileType.REVERSE_PROFILE);
+            } else if (age >= 18) {
+                emailService.sendReminderEmailsCreateProfile(profile, date);
+                emailService.sendReminderEmails(profile);
+                profileRepository.save(profile);
+                message.setMessage("Register profile successfully!");
+            } else {
+                emailService.sendReminderEmailsNotCreateProfile(profile, date);
+                message.setMessage("Can't register profile!");
+            }
         }
+
         return message;
     }
 
