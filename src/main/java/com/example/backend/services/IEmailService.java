@@ -86,6 +86,14 @@ public class IEmailService implements EmailService {
         sendEmail(profile.getEmail(), subject, text);
     }
 
+    @Override
+    public void sendReminderEmailsReverseProfile(Profile item, LocalDate eventDate) {
+        String subject = "Notification: Your register retest diver license success";
+        String text = "You can follow the website to know information about the examination.";
+
+        sendEmail(item.getEmail(), subject, text);
+    }
+
     private boolean isTodayOneDayBefore(LocalDate reminderDate) {
         return LocalDate.now().isEqual(reminderDate);
     }
