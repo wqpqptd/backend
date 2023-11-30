@@ -177,9 +177,9 @@ public class ProfileService {
         System.out.println(retrievedProfile);
         retrievedProfile.setProfileStatus(ProfileStatus.valueOf(profileStatus));
         LocalDate date = LocalDate.now();
-        if(profileStatus.equals(ProfileStatus.NOT_APPROVE)) {
+        if(profileStatus.equals(ProfileStatus.NOT_APPROVE.name())) {
             emailService.sendReminderEmailsNotApprove(retrievedProfile.getEmail(), date);
-        } else if (profileStatus.equals(ProfileStatus.APPROVED)) {
+        } else if (profileStatus.equals(ProfileStatus.APPROVED.name())) {
             emailService.sendReminderEmailsApprove(retrievedProfile.getEmail(), date);
         }
         profileRepository.save(retrievedProfile);
