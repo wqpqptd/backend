@@ -16,4 +16,5 @@ public class DetailExaminationsResponse {
     private String examinationsName;
     private LocalDate examinationsDate;
     private String examinationsDescription;
+    private String role;
 }

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -38,6 +39,7 @@ public class DetailExaminationsService {
         DetailExaminations detailExaminations = new DetailExaminations();
         detailExaminations.setOfficer(officer);
         detailExaminations.setExaminations(examinations);
+        detailExaminations.setRole(detailExaminationCreateRequest.getRole());
 
         return detailExaminationsRepository.save(detailExaminations);
     }
@@ -54,6 +56,9 @@ public class DetailExaminationsService {
                 update.setOfficer(officer);
             if (detailExaminationUpdateRequest.getExaminationsId() != 0)
                 update.setExaminations(examinations);
+            if(Objects.nonNull(detailExaminationUpdateRequest.getRole())) {
+                update.setRole(detailExaminationUpdateRequest.getRole());
+            }
             return detailExaminationsRepository.save(update);
         });
     }
@@ -78,6 +83,7 @@ public class DetailExaminationsService {
                         response.setExaminationsDate(examinations.getExaminationsDate());
                         response.setExaminationsDescription(examinations.getExaminationsDescription());
                     }
+                    response.setRole(tmp.getRole());
                     return response;
                 })
                 .collect(Collectors.toList());
@@ -102,6 +108,7 @@ public class DetailExaminationsService {
                         response.setExaminationsDate(examinations.getExaminationsDate());
                         response.setExaminationsDescription(examinations.getExaminationsDescription());
                     }
+                    response.setRole(tmp.getRole());
                     return response;
                 });
         if (result.isEmpty()){

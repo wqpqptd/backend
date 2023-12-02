@@ -7,4 +7,5 @@ import lombok.RequiredArgsConstructor;
 public class DetailExaminationCreateRequest {
     private int officerId;
     private int examinationsId;
+    private String role;
 }
