@@ -54,6 +54,7 @@ public class DetailProfileService {
                 if (detailProfile.getResultPractice() >= 80) {
                     detailProfile.setResult("PASS");
                 }
+                else detailProfile.setResult("FAILED");
             }
             else detailProfile.setResult("FAILED");
 
